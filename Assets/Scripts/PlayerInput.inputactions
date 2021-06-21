@@ -1,0 +1,86 @@
+{
+    "name": "PlayerInput",
+    "maps": [
+        {
+            "name": "Player",
+            "id": "ff5f2e3b-a4e1-4e70-8211-b0764b451454",
+            "actions": [
+                {
+                    "name": "Move",
+                    "type": "Value",
+                    "id": "cfb28c34-120b-498a-a33c-f5ddf737ecfe",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "AllowMove",
+                    "type": "Button",
+                    "id": "66cd748c-af24-4d50-8cf1-ad4dc028e757",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "SlowTap"
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "b774845f-380f-41dd-a17e-71a82ae2b2a5",
+                    "path": "<Mouse>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Mouse",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8f5f5a88-d42d-4839-a2a7-5b3580a1c380",
+                    "path": "<Touchscreen>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Touchscreen",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3b866df7-0979-4767-b37a-42da61c43891",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Mouse",
+                    "action": "AllowMove",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": [
+        {
+            "name": "Mouse",
+            "bindingGroup": "Mouse",
+            "devices": [
+                {
+                    "devicePath": "<Mouse>",
+                    "isOptional": true,
+                    "isOR": false
+                }
+            ]
+        },
+        {
+            "name": "Touchscreen",
+            "bindingGroup": "Touchscreen",
+            "devices": [
+                {
+                    "devicePath": "<Touchscreen>",
+                    "isOptional": false,
+                    "isOR": false
+                }
+            ]
+        }
+    ]
+}
