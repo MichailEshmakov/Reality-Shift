@@ -10,11 +10,13 @@ public class CameraFollower : MonoBehaviour
 
     void Start()
     {
-        _offset = transform.position - _followed.position;
+        if(_followed != null)
+            _offset = transform.position - _followed.position;
     }
 
     void LateUpdate()
     {
-        transform.position = _offset + _followed.position;
+        if (_followed != null)
+            transform.position = _offset + _followed.position;
     }
 }
