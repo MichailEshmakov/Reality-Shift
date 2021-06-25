@@ -7,6 +7,7 @@ public class QuestionsPanel : MonoBehaviour
 {
     [SerializeField] TMP_Text _questionsText;
     [SerializeField] Player _player;
+    [SerializeField] GameObject _effectListPanel;
 
 
     private void OnEnable()

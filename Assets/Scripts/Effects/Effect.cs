@@ -1,0 +1,27 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Events;
+
+public abstract class Effect : MonoBehaviour
+{
+    [SerializeField] private string _label;
+    [SerializeField] private Sprite _icon;
+    [SerializeField] private int _price;
+
+    public string Label => _label;
+    public Sprite Icon => _icon;
+    public int Price => _price;
+    public event UnityAction Enabled;
+    public event UnityAction Disabled;
+
+    protected virtual void OnEnable()
+    {
+        Enabled?.Invoke();
+    }
+
+    protected virtual void OnDisable()
+    {
+        Disabled?.Invoke();
+    }
+}
