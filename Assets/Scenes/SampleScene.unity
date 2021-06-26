@@ -1007,6 +1007,7 @@ MonoBehaviour:
   _effects:
   - {fileID: 1320433940}
   - {fileID: 963194230}
+  - {fileID: 963194232}
   _effectMenuContent: {fileID: 625156385}
   _effectViewPrefab: {fileID: 4905989380209983958, guid: 060a36134be005d4a99bc30467bd67da, type: 3}
 --- !u!4 &910315963
@@ -1171,6 +1172,7 @@ GameObject:
   - component: {fileID: 963194229}
   - component: {fileID: 963194230}
   - component: {fileID: 963194231}
+  - component: {fileID: 963194232}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1264,7 +1266,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 468a3b4b2bb7aad49b697fdcf4c60332, type: 3}
   m_Name: 
@@ -1288,6 +1290,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _camera: {fileID: 963194228}
   _player: {fileID: 1320433939}
+--- !u!114 &963194232
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963194225}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e99b06addc1828149937566acd5b88f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _label: "\u0417\u0443\u043C \u043A\u0430\u043C\u0435\u0440\u044B"
+  _icon: {fileID: 0}
+  _price: 0
+  _maxFieldOfView: 90
+  _minFieldOfView: 35
+  _zoomSpeed: 110
+  _camera: {fileID: 963194227}
 --- !u!1 &1106054788
 GameObject:
   m_ObjectHideFlags: 0
