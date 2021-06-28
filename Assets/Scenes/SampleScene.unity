@@ -1268,7 +1268,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 468a3b4b2bb7aad49b697fdcf4c60332, type: 3}
   m_Name: 
@@ -1318,7 +1318,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 160bf668d911cef4e874dfd4cf2cd3f9, type: 3}
   m_Name: 
@@ -1327,11 +1327,10 @@ MonoBehaviour:
     \u0432\u043E\u043A\u0440\u0443\u0433 \u043D\u0430\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u0438\u044F"
   _icon: {fileID: 0}
   _price: 0
+  _cameraMover: {fileID: 963194231}
   _maxAngle: 180
   _rotationSpeed: 100
-  _cameraMover: {fileID: 963194231}
   _camera: {fileID: 963194228}
-  _player: {fileID: 1320433939}
 --- !u!1 &1106054788
 GameObject:
   m_ObjectHideFlags: 0
@@ -1663,7 +1662,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4fbb542e0308b5c4fb7267574b9773bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _movingForce: 100
+  _movingForce: 75
   _questions: 2
   _inverseInputEffect: {fileID: 1320433940}
 --- !u!54 &1320433935
@@ -1675,8 +1674,8 @@ Rigidbody:
   m_GameObject: {fileID: 1320433933}
   serializedVersion: 2
   m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
+  m_Drag: 1
+  m_AngularDrag: 0.2
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0

@@ -2,20 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraAdoptionEffect : Effect
+public class CameraAdoptionEffect : CameraMovingEffect
 {
-    [SerializeField] CameraMover _cameraMover;
-    [SerializeField] Transform _player;
+    [SerializeField] private Transform _player;
+
+    private Quaternion _onEnablePlayerRotation;
 
     private void Update()
     {
-        _cameraMover.AddPosition((_player.rotation * _cameraMover.StartOffset) -_cameraMover.StartOffset);
-        _cameraMover.AddRotation(_player.rotation * _cameraMover.StartRotation * Quaternion.Inverse(_cameraMover.PreviousCameraRotation));
+        CameraMover.AddPosition((_player.rotation * Quaternion.Inverse(_onEnablePlayerRotation) * CameraMover.StartOffset) 
+            - (CameraMover.PreviousPlayerRotation * Quaternion.Inverse(_onEnablePlayerRotation) * CameraMover.StartOffset));
+        CameraMover.AddRotation(_player.rotation * Quaternion.Inverse(CameraMover.PreviousPlayerRotation));
     }
 
-    protected override void OnDisable()
+    protected override void OnEnable()
     {
-        _cameraMover.AddRotation(_cameraMover.StartRotation * Quaternion.Inverse(_cameraMover.PreviousCameraRotation));
-        base.OnDisable();
+        base.OnEnable();
+        _onEnablePlayerRotation = _player.rotation;
     }
 }

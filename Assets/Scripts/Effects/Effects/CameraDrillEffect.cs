@@ -2,13 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraDrillEffect : Effect
+public class CameraDrillEffect : CameraMovingEffect
 {
-    [SerializeField] float _maxAngle;
-    [SerializeField] float _rotationSpeed;
-    [SerializeField] CameraMover _cameraMover;
-    [SerializeField] Transform _camera;
-    [SerializeField] Transform _player;
+    [SerializeField] private float _maxAngle;
+    [SerializeField] private float _rotationSpeed;
+    [SerializeField] private Transform _camera;
 
     private float _currentAngle;
     private int _directionCoefficient = 1;
@@ -16,10 +14,7 @@ public class CameraDrillEffect : Effect
     private void Update()
     {
         _currentAngle += _rotationSpeed * Time.deltaTime * _directionCoefficient;
-        //Quaternion newRotation = Quaternion.AngleAxis(_rotationSpeed * Time.deltaTime * _directionCoefficient, _camera.forward) * _camera.rotation;
-        //_cameraMover.AddRotation(newRotation * Quaternion.Inverse(_cameraMover.PreviousCameraRotation));// Это работает, но не с удочерением
-
-        _cameraMover.AddRotation(Quaternion.AngleAxis(_rotationSpeed * Time.deltaTime * _directionCoefficient, _camera.forward));
+        CameraMover.AddRotation(Quaternion.AngleAxis(_rotationSpeed * Time.deltaTime * _directionCoefficient, _camera.forward));
 
         if (_directionCoefficient >= 0 && _currentAngle >= _maxAngle)
         {
@@ -29,5 +24,10 @@ public class CameraDrillEffect : Effect
         {
             _directionCoefficient = 1;
         }
+    }
+
+    protected override void Reset()
+    {
+        _currentAngle = 0;
     }
 }

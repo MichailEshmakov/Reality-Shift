@@ -54,13 +54,13 @@ public class EffectView : MonoBehaviour
         _effect.enabled = true;
     }
 
-    private void OnEffectEnabled()
+    private void OnEffectEnabled(Effect effect)
     {
         gameObject.SetActive(true);
         SetButtonsInteractibling();
     }
 
-    private void OnEffectDisabled()
+    private void OnEffectDisabled(Effect effect)
     {
         if (this != null)
         {

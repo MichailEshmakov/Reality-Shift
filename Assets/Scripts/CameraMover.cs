@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class CameraMover : MonoBehaviour
 {
-    [SerializeField] Transform _camera;
-    [SerializeField] Transform _player;
+    [SerializeField] private Transform _camera;
+    [SerializeField] private Transform _player;
 
     private Vector3 _startOffset;
     private Quaternion _startRotation;
@@ -13,11 +14,17 @@ public class CameraMover : MonoBehaviour
     private Quaternion _resultAdditiveRotation;
     private Vector3 _previousCameraPosition;
     private Quaternion _previousCameraRotation;
+    private Quaternion _previousPlayerRotation;
+    private Vector3 _previousPlayerPosition;
 
     public Vector3 StartOffset => _startOffset;
     public Quaternion StartRotation => _startRotation;
     public Vector3 PreviousCameraPosition => _previousCameraPosition;
     public Quaternion PreviousCameraRotation => _previousCameraRotation;
+    public Quaternion PreviousPlayerRotation => _previousPlayerRotation;
+    public Vector3 PreviousPlayerPosition => _previousPlayerPosition;
+
+    public event UnityAction CameraMovementEffectDisabled;
 
     void Start()
     {
@@ -45,11 +52,30 @@ public class CameraMover : MonoBehaviour
         _resultAdditiveRotation = additiveRotation * _resultAdditiveRotation;
     }
 
+    public void SubscribeCameraMovementEffect(CameraMovingEffect effect)
+    {
+        effect.Disabled += OnCameraMovementEffectDisabled;
+    }
+
+    private void OnCameraMovementEffectDisabled(Effect effect)
+    {
+        if (effect is CameraMovingEffect)
+        {
+            _camera.rotation = _startRotation;
+            _camera.position = _player.position + _startOffset;
+            effect.Disabled -= OnCameraMovementEffectDisabled;
+            Reset();
+            CameraMovementEffectDisabled?.Invoke();
+        }
+    }
+
     private void Reset()
     {
         _resultAdditivePosition = Vector3.zero;
         _resultAdditiveRotation = Quaternion.Euler(Vector3.zero);
         _previousCameraPosition = _camera.position;
         _previousCameraRotation = _camera.rotation;
+        _previousPlayerRotation = _player.rotation;
+        _previousPlayerPosition = _player.position;
     }
 }

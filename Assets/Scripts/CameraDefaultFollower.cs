@@ -9,6 +9,6 @@ public class CameraDefaultFollower : MonoBehaviour
 
     private void Update()
     {
-        _cameraMover.AddPosition(_cameraMover.StartOffset + _player.position - _cameraMover.PreviousCameraPosition);
+        _cameraMover.AddPosition(_player.position - _cameraMover.PreviousPlayerPosition);
     }
 }

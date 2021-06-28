@@ -12,16 +12,16 @@ public abstract class Effect : MonoBehaviour
     public string Label => _label;
     public Sprite Icon => _icon;
     public int Price => _price;
-    public event UnityAction Enabled;
-    public event UnityAction Disabled;
+    public event UnityAction<Effect> Enabled;
+    public event UnityAction<Effect> Disabled;
 
     protected virtual void OnEnable()
     {
-        Enabled?.Invoke();
+        Enabled?.Invoke(this);
     }
 
     protected virtual void OnDisable()
     {
-        Disabled?.Invoke();
+        Disabled?.Invoke(this);
     }
 }
