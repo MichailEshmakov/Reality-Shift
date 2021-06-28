@@ -1009,6 +1009,8 @@ MonoBehaviour:
   - {fileID: 963194230}
   - {fileID: 963194232}
   - {fileID: 963194233}
+  - {fileID: 963194234}
+  - {fileID: 963194235}
   _effectMenuContent: {fileID: 625156385}
   _effectViewPrefab: {fileID: 4905989380209983958, guid: 060a36134be005d4a99bc30467bd67da, type: 3}
 --- !u!4 &910315963
@@ -1175,6 +1177,8 @@ GameObject:
   - component: {fileID: 963194231}
   - component: {fileID: 963194232}
   - component: {fileID: 963194233}
+  - component: {fileID: 963194234}
+  - component: {fileID: 963194235}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1331,6 +1335,41 @@ MonoBehaviour:
   _maxAngle: 180
   _rotationSpeed: 100
   _camera: {fileID: 963194228}
+--- !u!114 &963194234
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963194225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ffaacba90ea44554f838c8ed7e659b53, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _label: "\u0421\u0434\u0432\u0438\u0433\u0438 \u043A\u0430\u043C\u0435\u0440\u044B"
+  _icon: {fileID: 0}
+  _price: 0
+  _cameraMover: {fileID: 963194231}
+  _maxShift: 2
+  speed: 1
+--- !u!114 &963194235
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963194225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc311d47dec52324fbc4a4e553b6fac5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _label: "\u041E\u0440\u0442\u043E\u0433\u0440\u0430\u0444\u0438\u0447\u0435\u0441\u043A\u0430\u044F
+    \u043A\u0430\u043C\u0435\u0440\u0430"
+  _icon: {fileID: 0}
+  _price: 0
+  _camera: {fileID: 963194227}
 --- !u!1 &1106054788
 GameObject:
   m_ObjectHideFlags: 0
@@ -2384,9 +2423,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Content: {fileID: 625156385}
-  m_Horizontal: 1
-  m_Vertical: 0
-  m_MovementType: 0
+  m_Horizontal: 0
+  m_Vertical: 1
+  m_MovementType: 2
   m_Elasticity: 0.1
   m_Inertia: 1
   m_DecelerationRate: 0.135

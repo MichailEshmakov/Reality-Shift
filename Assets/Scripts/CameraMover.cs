@@ -61,8 +61,13 @@ public class CameraMover : MonoBehaviour
     {
         if (effect is CameraMovingEffect)
         {
-            _camera.rotation = _startRotation;
-            _camera.position = _player.position + _startOffset;
+            if (_camera != null)
+            {
+                _camera.rotation = _startRotation;
+                if (_player != null)
+                    _camera.position = _player.position + _startOffset;
+            }
+
             effect.Disabled -= OnCameraMovementEffectDisabled;
             Reset();
             CameraMovementEffectDisabled?.Invoke();
@@ -73,9 +78,17 @@ public class CameraMover : MonoBehaviour
     {
         _resultAdditivePosition = Vector3.zero;
         _resultAdditiveRotation = Quaternion.Euler(Vector3.zero);
-        _previousCameraPosition = _camera.position;
-        _previousCameraRotation = _camera.rotation;
-        _previousPlayerRotation = _player.rotation;
-        _previousPlayerPosition = _player.position;
+
+        if (_camera != null)
+        {
+            _previousCameraPosition = _camera.position;
+            _previousCameraRotation = _camera.rotation;
+        }
+
+        if (_player != null)
+        {
+            _previousPlayerRotation = _player.rotation;
+            _previousPlayerPosition = _player.position;
+        }
     }
 }
