@@ -13,13 +13,13 @@ public abstract class CameraMovingEffect : Effect
         base.OnEnable();
         CameraMover.SubscribeCameraMovementEffect(this);
         CameraMover.CameraMovementEffectDisabled += OnCameraMovementEffectDisabled;
+        Reset();
     }
 
     protected override void OnDisable()
     {
         base.OnDisable();
         CameraMover.CameraMovementEffectDisabled -= OnCameraMovementEffectDisabled;
-        Reset();
     }
 
     private void OnCameraMovementEffectDisabled()
