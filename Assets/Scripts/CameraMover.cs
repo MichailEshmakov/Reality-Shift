@@ -42,7 +42,7 @@ public class CameraMover : MonoBehaviour
 
     public void AddRotation(Quaternion additiveRotation)
     {
-        _resultAdditiveRotation *= additiveRotation;
+        _resultAdditiveRotation = additiveRotation * _resultAdditiveRotation;
     }
 
     private void Reset()
