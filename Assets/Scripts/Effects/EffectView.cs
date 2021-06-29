@@ -22,8 +22,7 @@ public class EffectView : MonoBehaviour
     {
         _effect = effect;
         _label.text = _effect.Label;
-        if (_effect.Icon != null)
-            _icon.sprite = _effect.Icon;
+        _icon.sprite = _effect.Icon;
 
         _priceText.text = _effect.Price.ToString();
 
@@ -55,16 +54,19 @@ public class EffectView : MonoBehaviour
         _effect.enabled = true;
     }
 
-    private void OnEffectEnabled()
+    private void OnEffectEnabled(Effect effect)
     {
         gameObject.SetActive(true);
         SetButtonsInteractibling();
     }
 
-    private void OnEffectDisabled()
+    private void OnEffectDisabled(Effect effect)
     {
-        gameObject.SetActive(_isTestMode);
-        SetButtonsInteractibling();
+        if (this != null)
+        {
+            gameObject.SetActive(_isTestMode);
+            SetButtonsInteractibling();
+        }
     }
 
     private void OnDestroy()

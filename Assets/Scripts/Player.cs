@@ -70,12 +70,12 @@ public class Player : MonoBehaviour
         return false;
     }
 
-    private void OnInverseInputEffectDisabled()
+    private void OnInverseInputEffectDisabled(Effect effect)
     {
         _inversingCoefficient = 1;
     }
 
-    private void OnInverseInputEffectEnabled()
+    private void OnInverseInputEffectEnabled(Effect effect)
     {
         _inversingCoefficient = -1;
     }
