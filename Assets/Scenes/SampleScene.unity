@@ -834,6 +834,7 @@ GameObject:
   m_Component:
   - component: {fileID: 705507995}
   - component: {fileID: 705507994}
+  - component: {fileID: 705507996}
   m_Layer: 0
   m_Name: Directional Light
   m_TagString: Untagged
@@ -852,7 +853,7 @@ Light:
   serializedVersion: 10
   m_Type: 1
   m_Shape: 0
-  m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
+  m_Color: {r: 1, g: 0.9568628, b: 0.83921576, a: 1}
   m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
@@ -917,6 +918,31 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!114 &705507996
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 705507993}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 693370f850229184995746997cfa1c38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _label: "\u041C\u0435\u0440\u0446\u0430\u043D\u0438\u0435 \u0441\u0432\u0435\u0442\u0430"
+  _icon: {fileID: 0}
+  _price: 0
+  _light: {fileID: 705507994}
+  _colors:
+  - {r: 0, g: 1, b: 0.027116776, a: 0}
+  - {r: 0.9058824, g: 0.15294118, b: 0.9333334, a: 0}
+  - {r: 0, g: 0.8117648, b: 1, a: 0}
+  - {r: 0.9716981, g: 0.25510436, b: 0.1512549, a: 0}
+  _colorSpeed: 5
+  _maxIntensivity: 2
+  _minIntensivity: 0
+  _intensivitySpeed: 20
 --- !u!1001 &834394879
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1011,6 +1037,7 @@ MonoBehaviour:
   - {fileID: 963194233}
   - {fileID: 963194234}
   - {fileID: 963194235}
+  - {fileID: 705507996}
   _effectMenuContent: {fileID: 625156385}
   _effectViewPrefab: {fileID: 4905989380209983958, guid: 060a36134be005d4a99bc30467bd67da, type: 3}
 --- !u!4 &910315963
@@ -1272,7 +1299,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 468a3b4b2bb7aad49b697fdcf4c60332, type: 3}
   m_Name: 
@@ -1342,7 +1369,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ffaacba90ea44554f838c8ed7e659b53, type: 3}
   m_Name: 
@@ -1352,7 +1379,7 @@ MonoBehaviour:
   _price: 0
   _cameraMover: {fileID: 963194231}
   _maxShift: 2
-  speed: 1
+  speed: 10
 --- !u!114 &963194235
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1360,7 +1387,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dc311d47dec52324fbc4a4e553b6fac5, type: 3}
   m_Name: 
