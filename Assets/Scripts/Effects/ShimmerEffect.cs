@@ -13,11 +13,27 @@ public class ShimmerEffect : Effect
 
     private bool _isIncreasingIntensivity;
     private int _neededColorIndex = 0;
+    private float _defaultIntensivity;
+    private Color _defaultColor;
 
     private void Update()
     {
         ChangeIntensivity();
         ChangeColor();
+    }
+
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        _defaultIntensivity = _light.intensity;
+        _defaultColor = _light.color;
+    }
+
+    protected override void OnDisable()
+    {
+        base.OnDisable();
+        _light.color = _defaultColor;
+        _light.intensity = _defaultIntensivity;
     }
 
     private void ChangeIntensivity()
