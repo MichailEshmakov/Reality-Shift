@@ -1040,6 +1040,7 @@ MonoBehaviour:
   - {fileID: 705507996}
   - {fileID: 1320433941}
   - {fileID: 1320433936}
+  - {fileID: 1320433944}
   _effectMenuContent: {fileID: 625156385}
   _effectViewPrefab: {fileID: 4905989380209983958, guid: 060a36134be005d4a99bc30467bd67da, type: 3}
 --- !u!4 &910315963
@@ -1708,12 +1709,13 @@ GameObject:
   - component: {fileID: 1320433938}
   - component: {fileID: 1320433937}
   - component: {fileID: 1320433935}
+  - component: {fileID: 1320433943}
   - component: {fileID: 1320433934}
   - component: {fileID: 1320433940}
   - component: {fileID: 1320433941}
   - component: {fileID: 1320433942}
   - component: {fileID: 1320433936}
-  - component: {fileID: 1320433943}
+  - component: {fileID: 1320433944}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -1897,6 +1899,23 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1320433944
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1320433933}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89f7062449a7fe34bb3413f4e7b09267, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _label: "\u0424\u043E\u0440\u043C\u0430 \u043A\u0430\u043F\u0441\u0443\u043B\u044B"
+  _icon: {fileID: 0}
+  _price: 0
+  _mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
+  _hierarchy: {fileID: 1320433942}
 --- !u!1001 &1472166155
 PrefabInstance:
   m_ObjectHideFlags: 0
