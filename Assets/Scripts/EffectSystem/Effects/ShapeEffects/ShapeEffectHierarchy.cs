@@ -12,6 +12,11 @@ public class ShapeEffectHierarchy : MonoBehaviour
 
     private ShapeEffect _currentEffect;
 
+    private void Awake()
+    {
+        DontDestroyOnLoad(gameObject);
+    }
+
     public void AddEffect(ShapeEffect shapeEffect)
     {
         _shapeEffects.Add(shapeEffect);

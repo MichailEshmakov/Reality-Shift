@@ -26,6 +26,11 @@ public class CameraMover : MonoBehaviour
 
     public event UnityAction CameraMovementEffectDisabled;
 
+    private void Awake()
+    {
+        DontDestroyOnLoad(gameObject);
+    }
+
     void Start()
     {
         _startRotation = _camera.rotation;

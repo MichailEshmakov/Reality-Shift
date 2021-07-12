@@ -15,6 +15,11 @@ public abstract class Effect : MonoBehaviour
     public event UnityAction<Effect> Enabled;
     public event UnityAction<Effect> Disabled;
 
+    private void Awake()
+    {
+        DontDestroyOnLoad(gameObject);
+    }
+
     protected virtual void OnEnable()
     {
         Enabled?.Invoke(this);

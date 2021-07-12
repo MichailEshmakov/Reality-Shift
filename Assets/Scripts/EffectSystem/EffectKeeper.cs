@@ -12,6 +12,8 @@ public class EffectKeeper : MonoBehaviour
 
     private void Awake()
     {
+        DontDestroyOnLoad(gameObject);
+
         foreach (Effect effect in _effects)
         {
             EffectView newView = Instantiate(_effectViewPrefab, _effectMenuContent);

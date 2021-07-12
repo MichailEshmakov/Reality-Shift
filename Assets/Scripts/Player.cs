@@ -20,6 +20,7 @@ public class Player : MonoBehaviour
     {
         _input = new PlayerInput();
         _rigidbody = GetComponent<Rigidbody>();
+        DontDestroyOnLoad(gameObject);
     }
 
     private void OnEnable()

@@ -9,6 +9,10 @@ public class QuestionsPanel : MonoBehaviour
     [SerializeField] Player _player;
     [SerializeField] GameObject _effectListPanel;
 
+    private void Awake()
+    {
+        DontDestroyOnLoad(gameObject);
+    }
 
     private void OnEnable()
     {
