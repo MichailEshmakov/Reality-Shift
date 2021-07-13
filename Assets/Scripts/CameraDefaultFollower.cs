@@ -2,13 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraDefaultFollower : MonoBehaviour
+public class CameraDefaultFollower : Singleton<CameraDefaultFollower>
 {
-    [SerializeField] private Transform _player;
-    [SerializeField] private CameraMover _cameraMover;
-
     private void Update()
     {
-        _cameraMover.AddPosition(_player.position - _cameraMover.PreviousPlayerPosition);
+        CameraMover.Instance.AddPosition(Player.Instance.transform.position - CameraMover.Instance.PreviousPlayerPosition);
     }
 }

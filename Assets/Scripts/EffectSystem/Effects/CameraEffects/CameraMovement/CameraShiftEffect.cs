@@ -15,7 +15,7 @@ public class CameraShiftEffect : CameraMovingEffect
     private void Update()
     {
         float adding = Mathf.MoveTowards(_currentShift, _isIncreasingShift ? _maxShift : 0, speed * Time.deltaTime) - _currentShift; 
-        CameraMover.AddPosition(_shiftDirection * adding);
+        CameraMover.Instance.AddPosition(_shiftDirection * adding);
         _currentShift += adding;
 
         if (_isIncreasingShift && _currentShift >= _maxShift)
@@ -29,7 +29,7 @@ public class CameraShiftEffect : CameraMovingEffect
         }
     }
 
-    protected override void Reset()
+    protected override void ResetParameters()
     {
         _currentShift = 0;
         _isIncreasingShift = true;

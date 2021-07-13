@@ -3,30 +3,33 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class CameraMovingEffect : Effect
-{
-    [SerializeField] private CameraMover _cameraMover;
-
-    protected CameraMover CameraMover => _cameraMover;
-
+{    
     protected override void OnEnable()
     {
         base.OnEnable();
-        CameraMover.SubscribeCameraMovementEffect(this);
-        CameraMover.CameraMovementEffectDisabled += OnCameraMovementEffectDisabled;
-        Reset();
+        CameraMover.Instance.SubscribeCameraMovementEffect(this);
+        CameraMover.Instance.CameraMovementEffectDisabled += OnCameraMovementEffectDisabled;
+        StartPlayerPlacer.PlayerPlaced += OnPlayerPlaced;
+        ResetParameters();
     }
 
     protected override void OnDisable()
     {
         base.OnDisable();
-        CameraMover.CameraMovementEffectDisabled -= OnCameraMovementEffectDisabled;
+        CameraMover.Instance.CameraMovementEffectDisabled -= OnCameraMovementEffectDisabled;
+        StartPlayerPlacer.PlayerPlaced -= OnPlayerPlaced;
+    }
+
+    private void OnPlayerPlaced()
+    {
+        ResetParameters();
     }
 
     private void OnCameraMovementEffectDisabled()
     {
-        Reset();
+        ResetParameters();
     }
 
-    protected virtual void Reset() { }
+    protected virtual void ResetParameters() { }
 
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 
 [RequireComponent(typeof(Rigidbody))]
-public class Player : MonoBehaviour
+public class Player : Singleton<Player>
 {
     [SerializeField] private float _movingForce;
     [SerializeField] int _questions;
@@ -16,8 +16,9 @@ public class Player : MonoBehaviour
 
     public event UnityAction<int> QuestionsChanged;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         _input = new PlayerInput();
         _rigidbody = GetComponent<Rigidbody>();
     }
@@ -30,17 +31,22 @@ public class Player : MonoBehaviour
             _inverseInputEffect.Disabled += OnInverseInputEffectDisabled;
             _inverseInputEffect.Enabled += OnInverseInputEffectEnabled;
         }
-
     }
 
     private void OnDisable()
     {
-        _input.Disable();
+        if (_input != null)
+            _input.Disable();
         if (_inverseInputEffect != null)
         {
             _inverseInputEffect.Disabled -= OnInverseInputEffectDisabled;
             _inverseInputEffect.Enabled -= OnInverseInputEffectEnabled;
         }
+    }
+
+    private void Start()
+    {
+        QuestionsChanged?.Invoke(_questions);
     }
 
     private void FixedUpdate()

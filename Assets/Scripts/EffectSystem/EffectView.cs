@@ -28,6 +28,7 @@ public class EffectView : MonoBehaviour
 
         _effect.Enabled += OnEffectEnabled;
         _effect.Disabled += OnEffectDisabled;
+        _effect.Destroyed += OnEffectDestroyed;
 
         _disableButton.onClick.AddListener(TryBuyEffectDisabling);
         _enableButton.onClick.AddListener(EnableEffect);
@@ -69,10 +70,19 @@ public class EffectView : MonoBehaviour
         }
     }
 
+    private void OnEffectDestroyed()
+    {
+        if (this != null)
+        {
+            Destroy(gameObject);
+        }
+    }
+
     private void OnDestroy()
     {
         _effect.Enabled -= OnEffectEnabled;
         _effect.Disabled -= OnEffectDisabled;
+        _effect.Destroyed -= OnEffectDestroyed;
         _disableButton.onClick.RemoveListener(TryBuyEffectDisabling);
         _disableButton.onClick.RemoveListener(EnableEffect);
     }
