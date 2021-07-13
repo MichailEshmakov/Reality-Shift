@@ -97,7 +97,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000000, guid: 2cfa6c745f7ee6d459bfbc8db197c051, type: 2}
   m_LightingSettings: {fileID: 0}
 --- !u!196 &4
 NavMeshSettings:
@@ -835,7 +835,6 @@ GameObject:
   - component: {fileID: 705507995}
   - component: {fileID: 705507994}
   - component: {fileID: 705507997}
-  - component: {fileID: 705507996}
   m_Layer: 0
   m_Name: Directional Light
   m_TagString: Untagged
@@ -919,31 +918,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
---- !u!114 &705507996
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 705507993}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 693370f850229184995746997cfa1c38, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _label: "\u041C\u0435\u0440\u0446\u0430\u043D\u0438\u0435 \u0441\u0432\u0435\u0442\u0430"
-  _icon: {fileID: 0}
-  _price: 0
-  _light: {fileID: 705507994}
-  _colors:
-  - {r: 0, g: 1, b: 0.027116776, a: 0}
-  - {r: 0.9058824, g: 0.15294118, b: 0.9333334, a: 0}
-  - {r: 0, g: 0.8117648, b: 1, a: 0}
-  - {r: 0.9716981, g: 0.25510436, b: 0.1512549, a: 0}
-  _colorSpeed: 5
-  _maxIntensivity: 2
-  _minIntensivity: 0
-  _intensivitySpeed: 20
 --- !u!114 &705507997
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1023,6 +997,7 @@ GameObject:
   m_Component:
   - component: {fileID: 910315963}
   - component: {fileID: 910315962}
+  - component: {fileID: 910315964}
   m_Layer: 0
   m_Name: EffectKeeper
   m_TagString: Untagged
@@ -1050,7 +1025,7 @@ MonoBehaviour:
   - {fileID: 963194233}
   - {fileID: 963194234}
   - {fileID: 963194235}
-  - {fileID: 705507996}
+  - {fileID: 910315964}
   - {fileID: 1320433941}
   - {fileID: 1320433936}
   - {fileID: 1320433944}
@@ -1070,6 +1045,30 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &910315964
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 910315961}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 693370f850229184995746997cfa1c38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _label: "\u041C\u0435\u0440\u0446\u0430\u043D\u0438\u0435 \u0441\u0432\u0435\u0442\u0430"
+  _icon: {fileID: 0}
+  _price: 0
+  _colors:
+  - {r: 0, g: 1, b: 0.027116776, a: 0}
+  - {r: 0.9058824, g: 0.15294118, b: 0.9333334, a: 0}
+  - {r: 0, g: 0.8117648, b: 1, a: 0}
+  - {r: 0.9716981, g: 0.25510436, b: 0.1512549, a: 0}
+  _colorSpeed: 5
+  _maxIntensivity: 2
+  _minIntensivity: 0
+  _intensivitySpeed: 20
 --- !u!1 &955784957
 GameObject:
   m_ObjectHideFlags: 0

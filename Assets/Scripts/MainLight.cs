@@ -3,6 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Light))]
-public class MainLight : Singleton<MainLight>
+public class MainLight : MonoBehaviour
 {
 }

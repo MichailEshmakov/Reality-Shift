@@ -37,10 +37,9 @@ public class Finish : MonoBehaviour
     private void FinishLevel()
     {
         int currentLevelIndex = SceneManager.GetActiveScene().buildIndex;
-        if (currentLevelIndex != SceneManager.sceneCount - 1)
+        if (currentLevelIndex != SceneManager.sceneCountInBuildSettings - 1)
             SceneManager.LoadScene(currentLevelIndex + 1);
         else
             SceneManager.LoadScene(0);
-
     }
 }
