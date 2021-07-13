@@ -25,6 +25,12 @@ public class CameraMover : Singleton<CameraMover>
 
     public event UnityAction CameraMovementEffectDisabled;
 
+    protected override void Awake()
+    {
+        SetStartParameters();
+        base.Awake();
+    }
+
     private void OnEnable()
     {
         SceneManager.sceneUnloaded += OnSceneUnloaded;
@@ -35,12 +41,6 @@ public class CameraMover : Singleton<CameraMover>
     {
         SceneManager.sceneUnloaded -= OnSceneUnloaded;
         StartPlayerPlacer.PlayerPlaced -= OnPlayerPlaced;
-    }
-
-    void Start()
-    {
-        _startRotation = MainCamera.Instance.transform.rotation;
-        _startOffset = MainCamera.Instance.transform.position - Player.Instance.transform.position;
     }
 
     private void LateUpdate()
@@ -71,8 +71,28 @@ public class CameraMover : Singleton<CameraMover>
         effect.Disabled += OnCameraMovementEffectDisabled;
     }
 
+    private void SetStartParameters()
+    {
+        if (MainCamera.Instance != null)
+        {
+            MainCamera.Awaked -= SetStartParameters;
+            if (Player.Instance != null)
+            {
+                Player.Awaked -= SetStartParameters;
+                ResetParameters();
+                _startRotation = MainCamera.Instance.transform.rotation;
+                _startOffset = MainCamera.Instance.transform.position - Player.Instance.transform.position;
+            }
+            else
+                Player.Awaked += SetStartParameters;
+        }
+        else
+            MainCamera.Awaked += SetStartParameters;
+    }
+
     private void OnPlayerPlaced()
     {
+        ResetCameraPosition();
         ResetParameters();
         _canMove = true;
     }
@@ -86,13 +106,7 @@ public class CameraMover : Singleton<CameraMover>
     {
         if (effect is CameraMovingEffect)
         {
-            if (MainCamera.Instance != null)
-            {
-                MainCamera.Instance.transform.rotation = _startRotation;
-                if (Player.Instance != null)
-                    MainCamera.Instance.transform.position = Player.Instance.transform.position + _startOffset;
-            }
-
+            ResetCameraPosition();
             effect.Disabled -= OnCameraMovementEffectDisabled;
             ResetParameters();
             CameraMovementEffectDisabled?.Invoke();
@@ -114,6 +128,16 @@ public class CameraMover : Singleton<CameraMover>
         {
             _previousPlayerRotation = Player.Instance.transform.rotation;
             _previousPlayerPosition = Player.Instance.transform.position;
+        }
+    }
+
+    private void ResetCameraPosition()
+    {
+        if (MainCamera.Instance != null)
+        {
+            MainCamera.Instance.transform.rotation = _startRotation;
+            if (Player.Instance != null)
+                MainCamera.Instance.transform.position = Player.Instance.transform.position + _startOffset;
         }
     }
 }

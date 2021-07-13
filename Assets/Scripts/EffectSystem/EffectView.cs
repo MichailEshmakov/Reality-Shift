@@ -18,11 +18,6 @@ public class EffectView : MonoBehaviour
 
     public UnityAction<int, EffectView> BuyingEffectDisablingTried;
 
-    private void Awake()
-    {
-        DontDestroyOnLoad(gameObject);
-    }
-
     public void Init(Effect effect)
     {
         _effect = effect;

@@ -21,6 +21,7 @@ public class StartPlayerPlacer : Singleton<StartPlayerPlacer>
 
     private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
     {
+        _startPosition = FindObjectOfType<StartPosition>().transform.position;
         PlacePlayer();
     }
 
