@@ -1,16 +1,47 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
-public class StartPlayerPlacer : MonoBehaviour
+public class StartPlayerPlacer : Singleton<StartPlayerPlacer>
 {
-    [SerializeField] private Transform _startPosition;
+    private Vector3 _startPosition;
 
-    private void Start()
+    public static event UnityAction PlayerPlaced;
+
+    protected override void Awake()
     {
-        Player player = FindObjectOfType<Player>();
-        Vector3 positionDifference = _startPosition.position - player.transform.position;
-        player.transform.position += positionDifference;
-        Camera.main.transform.position += positionDifference;
+        _startPosition = FindObjectOfType<StartPosition>().transform.position;
+        SceneManager.sceneLoaded += OnSceneLoaded;
+        base.Awake();
+        PlacePlayer();
+
+    }
+
+    private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
+    {
+        PlacePlayer();
+    }
+
+    private void PlacePlayer()
+    {
+        if (Player.Instance != null)
+        {
+            Player.Awaked -= PlacePlayer;
+            if (MainCamera.Instance != null)
+            {
+                MainCamera.Awaked -= PlacePlayer;
+                Vector3 positionDifference = _startPosition - Player.Instance.transform.position;
+                Player.Instance.transform.position += positionDifference;
+                MainCamera.Instance.transform.position += positionDifference;
+                PlayerPlaced?.Invoke();
+
+            }
+            else
+                MainCamera.Awaked += PlacePlayer;
+        }
+        else
+            Player.Awaked += PlacePlayer;
     }
 }

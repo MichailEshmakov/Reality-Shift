@@ -2,12 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
-public class CameraMover : MonoBehaviour
+public class CameraMover : Singleton<CameraMover>
 {
-    [SerializeField] private Transform _camera;
-    [SerializeField] private Transform _player;
-
     private Vector3 _startOffset;
     private Quaternion _startRotation;
     private Vector3 _resultAdditivePosition;
@@ -16,6 +14,7 @@ public class CameraMover : MonoBehaviour
     private Quaternion _previousCameraRotation;
     private Quaternion _previousPlayerRotation;
     private Vector3 _previousPlayerPosition;
+    private bool _canMove;
 
     public Vector3 StartOffset => _startOffset;
     public Quaternion StartRotation => _startRotation;
@@ -26,35 +25,45 @@ public class CameraMover : MonoBehaviour
 
     public event UnityAction CameraMovementEffectDisabled;
 
-    private void Awake()
+    private void OnEnable()
     {
-        DontDestroyOnLoad(gameObject);
+        SceneManager.sceneUnloaded += OnSceneUnloaded;
+        StartPlayerPlacer.PlayerPlaced += OnPlayerPlaced;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneUnloaded -= OnSceneUnloaded;
+        StartPlayerPlacer.PlayerPlaced -= OnPlayerPlaced;
     }
 
     void Start()
     {
-        _startRotation = _camera.rotation;
-        _startOffset = _camera.position - _player.position;
-
-        Reset();
+        _startRotation = MainCamera.Instance.transform.rotation;
+        _startOffset = MainCamera.Instance.transform.position - Player.Instance.transform.position;
     }
 
     private void LateUpdate()
     {
-        _camera.position += _resultAdditivePosition;
-        _camera.rotation = _resultAdditiveRotation * _camera.rotation;
+        if (_canMove)
+        {
+            MainCamera.Instance.transform.position += _resultAdditivePosition;
+            MainCamera.Instance.transform.rotation = _resultAdditiveRotation * MainCamera.Instance.transform.rotation;
+        }
 
-        Reset();
+        ResetParameters();
     }
 
     public void AddPosition(Vector3 additivePosition)
     {
-        _resultAdditivePosition += additivePosition;
+        if (_canMove)
+            _resultAdditivePosition += additivePosition;
     }
 
     public void AddRotation(Quaternion additiveRotation)
     {
-        _resultAdditiveRotation = additiveRotation * _resultAdditiveRotation;
+        if (_canMove)
+            _resultAdditiveRotation = additiveRotation * _resultAdditiveRotation;
     }
 
     public void SubscribeCameraMovementEffect(CameraMovingEffect effect)
@@ -62,38 +71,49 @@ public class CameraMover : MonoBehaviour
         effect.Disabled += OnCameraMovementEffectDisabled;
     }
 
+    private void OnPlayerPlaced()
+    {
+        ResetParameters();
+        _canMove = true;
+    }
+
+    private void OnSceneUnloaded(Scene arg0)
+    {
+        _canMove = false;
+    }
+
     private void OnCameraMovementEffectDisabled(Effect effect)
     {
         if (effect is CameraMovingEffect)
         {
-            if (_camera != null)
+            if (MainCamera.Instance != null)
             {
-                _camera.rotation = _startRotation;
-                if (_player != null)
-                    _camera.position = _player.position + _startOffset;
+                MainCamera.Instance.transform.rotation = _startRotation;
+                if (Player.Instance != null)
+                    MainCamera.Instance.transform.position = Player.Instance.transform.position + _startOffset;
             }
 
             effect.Disabled -= OnCameraMovementEffectDisabled;
-            Reset();
+            ResetParameters();
             CameraMovementEffectDisabled?.Invoke();
         }
     }
 
-    private void Reset()
+    private void ResetParameters()
     {
         _resultAdditivePosition = Vector3.zero;
         _resultAdditiveRotation = Quaternion.Euler(Vector3.zero);
 
-        if (_camera != null)
+        if (MainCamera.Instance != null)
         {
-            _previousCameraPosition = _camera.position;
-            _previousCameraRotation = _camera.rotation;
+            _previousCameraPosition = MainCamera.Instance.transform.position;
+            _previousCameraRotation = MainCamera.Instance.transform.rotation;
         }
 
-        if (_player != null)
+        if (Player.Instance.transform != null)
         {
-            _previousPlayerRotation = _player.rotation;
-            _previousPlayerPosition = _player.position;
+            _previousPlayerRotation = Player.Instance.transform.rotation;
+            _previousPlayerPosition = Player.Instance.transform.position;
         }
     }
 }

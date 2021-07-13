@@ -3,18 +3,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShapeEffectHierarchy : MonoBehaviour
+public class ShapeEffectHierarchy : Singleton<ShapeEffectHierarchy>
 {
     [SerializeField] private List<ShapeEffect> _shapeEffects;
     [SerializeField] private Mesh _defaultMesh;
-    [SerializeField] private MeshCollider _playersCollider;
-    [SerializeField] private MeshFilter _playersMeshFilter;
 
+    private MeshCollider _playersCollider;
+    private MeshFilter _playersMeshFilter;
     private ShapeEffect _currentEffect;
 
-    private void Awake()
+    protected override void Awake()
     {
-        DontDestroyOnLoad(gameObject);
+        base.Awake();
+        _playersCollider = Player.Instance.GetComponent<MeshCollider>();
+        _playersMeshFilter = Player.Instance.GetComponent<MeshFilter>();
     }
 
     public void AddEffect(ShapeEffect shapeEffect)
@@ -50,7 +52,9 @@ public class ShapeEffectHierarchy : MonoBehaviour
 
     private void ApplyShape(Mesh mesh)
     {
-        _playersCollider.sharedMesh = mesh;
-        _playersMeshFilter.mesh = mesh;
+        if (_playersCollider != null)
+            _playersCollider.sharedMesh = mesh;
+        if (_playersMeshFilter != null)
+            _playersMeshFilter.mesh = mesh;
     }
 }

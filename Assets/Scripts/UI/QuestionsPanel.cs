@@ -6,22 +6,23 @@ using UnityEngine;
 public class QuestionsPanel : MonoBehaviour
 {
     [SerializeField] TMP_Text _questionsText;
-    [SerializeField] Player _player;
-    [SerializeField] GameObject _effectListPanel;
 
     private void Awake()
     {
-        DontDestroyOnLoad(gameObject);
+        if (Player.Instance == null)
+            Player.Awaked += OnPlayerAwaked;
+        else
+            Player.Instance.QuestionsChanged += OnQuestionsChanged;
     }
 
-    private void OnEnable()
+    private void OnPlayerAwaked()
     {
-        _player.QuestionsChanged += OnQuestionsChanged;
+        Player.Instance.QuestionsChanged += OnQuestionsChanged;
     }
 
-    private void OnDisable()
+    private void OnDestroy()
     {
-        _player.QuestionsChanged -= OnQuestionsChanged;
+        Player.Instance.QuestionsChanged -= OnQuestionsChanged;
     }
 
     public void OnQuestionsChanged(int questions)

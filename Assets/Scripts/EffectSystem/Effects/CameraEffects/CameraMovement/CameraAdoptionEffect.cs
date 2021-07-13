@@ -10,9 +10,9 @@ public class CameraAdoptionEffect : CameraMovingEffect
 
     private void Update()
     {
-        CameraMover.AddPosition((_player.rotation * Quaternion.Inverse(_onEnablePlayerRotation) * CameraMover.StartOffset) 
-            - (CameraMover.PreviousPlayerRotation * Quaternion.Inverse(_onEnablePlayerRotation) * CameraMover.StartOffset));
-        CameraMover.AddRotation(_player.rotation * Quaternion.Inverse(CameraMover.PreviousPlayerRotation));
+        CameraMover.Instance.AddPosition((_player.rotation * Quaternion.Inverse(_onEnablePlayerRotation) * CameraMover.Instance.StartOffset) 
+            - (CameraMover.Instance.PreviousPlayerRotation * Quaternion.Inverse(_onEnablePlayerRotation) * CameraMover.Instance.StartOffset));
+        CameraMover.Instance.AddRotation(_player.rotation * Quaternion.Inverse(CameraMover.Instance.PreviousPlayerRotation));
     }
 
     protected override void OnEnable()

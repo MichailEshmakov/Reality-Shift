@@ -14,11 +14,7 @@ public abstract class Effect : MonoBehaviour
     public int Price => _price;
     public event UnityAction<Effect> Enabled;
     public event UnityAction<Effect> Disabled;
-
-    private void Awake()
-    {
-        DontDestroyOnLoad(gameObject);
-    }
+    public event UnityAction Destroyed;
 
     protected virtual void OnEnable()
     {
@@ -28,5 +24,10 @@ public abstract class Effect : MonoBehaviour
     protected virtual void OnDisable()
     {
         Disabled?.Invoke(this);
+    }
+
+    protected virtual void OnDestroy()
+    {
+        Destroyed?.Invoke();
     }
 }
