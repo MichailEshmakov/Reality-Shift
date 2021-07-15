@@ -34,13 +34,13 @@ public class CameraMover : Singleton<CameraMover>
     private void OnEnable()
     {
         SceneManager.sceneUnloaded += OnSceneUnloaded;
-        StartPlayerPlacer.PlayerPlaced += OnPlayerPlaced;
+        PlayerPlacer.PlayerPlaced += OnPlayerPlaced;
     }
 
     private void OnDisable()
     {
         SceneManager.sceneUnloaded -= OnSceneUnloaded;
-        StartPlayerPlacer.PlayerPlaced -= OnPlayerPlaced;
+        PlayerPlacer.PlayerPlaced -= OnPlayerPlaced;
     }
 
     private void LateUpdate()

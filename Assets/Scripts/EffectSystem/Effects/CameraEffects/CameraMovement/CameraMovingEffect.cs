@@ -9,7 +9,7 @@ public abstract class CameraMovingEffect : Effect
         base.OnEnable();
         CameraMover.Instance.SubscribeCameraMovementEffect(this);
         CameraMover.Instance.CameraMovementEffectDisabled += OnCameraMovementEffectDisabled;
-        StartPlayerPlacer.PlayerPlaced += OnPlayerPlaced;
+        PlayerPlacer.PlayerPlaced += OnPlayerPlaced;
         ResetParameters();
     }
 
@@ -17,7 +17,7 @@ public abstract class CameraMovingEffect : Effect
     {
         base.OnDisable();
         CameraMover.Instance.CameraMovementEffectDisabled -= OnCameraMovementEffectDisabled;
-        StartPlayerPlacer.PlayerPlaced -= OnPlayerPlaced;
+        PlayerPlacer.PlayerPlaced -= OnPlayerPlaced;
     }
 
     private void OnPlayerPlaced()
