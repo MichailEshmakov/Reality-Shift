@@ -3347,7 +3347,7 @@ GameObject:
   - component: {fileID: 1817936343}
   - component: {fileID: 1817936342}
   m_Layer: 0
-  m_Name: StartPlayerPlacer
+  m_Name: PlayerPlacer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
