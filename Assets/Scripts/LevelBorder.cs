@@ -10,8 +10,8 @@ public class LevelBorder : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {
         if (other.TryGetComponent(out Player player))
-        {
             PlayerOuted?.Invoke();
-        }
+        else if (other.TryGetComponent(out KinematicChanger changer) == false || changer.IsKinematicChangingOnThisFrame == false)
+            other.gameObject.SetActive(false);
     }
 }
