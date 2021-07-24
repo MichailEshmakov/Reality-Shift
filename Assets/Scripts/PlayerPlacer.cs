@@ -13,8 +13,6 @@ public class PlayerPlacer : Singleton<PlayerPlacer>
 
     protected override void Awake()
     {
-        //_startPosition = FindObjectOfType<StartPosition>().transform.position;
-        //_levelBorder = FindObjectOfType<LevelBorder>();
         SceneManager.sceneLoaded += OnSceneLoaded;
         SceneManager.sceneUnloaded += OnSceneUnloaded; ;
         base.Awake();

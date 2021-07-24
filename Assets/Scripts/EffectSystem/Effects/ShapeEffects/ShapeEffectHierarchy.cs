@@ -15,8 +15,17 @@ public class ShapeEffectHierarchy : Singleton<ShapeEffectHierarchy>
     protected override void Awake()
     {
         base.Awake();
-        _playersCollider = Player.Instance.GetComponent<MeshCollider>();
-        _playersMeshFilter = Player.Instance.GetComponent<MeshFilter>();
+        if (Player.Instance != null)
+            TakePlayerComponents();
+        else
+            Player.Awaked += OnPlayerAwaked;
+
+    }
+
+    private void OnPlayerAwaked()
+    {
+        Player.Awaked -= OnPlayerAwaked;
+        TakePlayerComponents();
     }
 
     public void AddEffect(ShapeEffect shapeEffect)
@@ -56,5 +65,11 @@ public class ShapeEffectHierarchy : Singleton<ShapeEffectHierarchy>
             _playersCollider.sharedMesh = mesh;
         if (_playersMeshFilter != null)
             _playersMeshFilter.mesh = mesh;
+    }
+
+    private void TakePlayerComponents()
+    {
+        _playersCollider = Player.Instance.GetComponent<MeshCollider>();
+        _playersMeshFilter = Player.Instance.GetComponent<MeshFilter>();
     }
 }
