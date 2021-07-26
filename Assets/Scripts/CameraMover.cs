@@ -76,23 +76,17 @@ public class CameraMover : Singleton<CameraMover>
 
     private void SetStartParameters()
     {
-        if (MainCamera.Instance != null)
+        MainCamera.DoWhenAwaked(() =>
         {
-            MainCamera.Awaked -= SetStartParameters;
-            if (Player.Instance != null)
+            Player.DoWhenAwaked(() =>
             {
-                Player.Awaked -= SetStartParameters;
                 ResetParameters();
                 _startRotation = MainCamera.Instance.transform.rotation;
                 _startOffset = MainCamera.Instance.transform.position - Player.Instance.transform.position;
                 _isStartParametersSet = true;
                 StartParametersSet?.Invoke();
-            }
-            else
-                Player.Awaked += SetStartParameters;
-        }
-        else
-            MainCamera.Awaked += SetStartParameters;
+            });
+        });
     }
 
     private void OnPlayerPlaced()

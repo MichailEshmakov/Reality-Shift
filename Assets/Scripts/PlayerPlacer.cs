@@ -45,26 +45,20 @@ public class PlayerPlacer : Singleton<PlayerPlacer>
 
     private void PlacePlayer()
     {
-        if (CameraMover.Instance != null)
+        CameraMover.DoWhenAwaked(() => 
         {
-            CameraMover.Awaked -= PlacePlayer;
             if (CameraMover.Instance.IsStartParametersSet)
             {
                 CameraMover.Instance.StartParametersSet -= PlacePlayer;
-                if (Player.Instance != null)
+                Player.DoWhenAwaked(() =>
                 {
-                    Player.Awaked -= PlacePlayer;
                     Vector3 positionDifference = _startPosition - Player.Instance.transform.position;
                     Player.Instance.transform.position += positionDifference;
                     PlayerPlaced?.Invoke();
-                }
-                else
-                    Player.Awaked += PlacePlayer;
+                });
             }
             else
                 CameraMover.Instance.StartParametersSet += PlacePlayer;
-        }
-        else
-            CameraMover.Awaked += PlacePlayer;
+        });
     }
 }
