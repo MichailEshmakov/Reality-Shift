@@ -15,6 +15,7 @@ public class CameraMover : Singleton<CameraMover>
     private Quaternion _previousPlayerRotation;
     private Vector3 _previousPlayerPosition;
     private bool _canMove;
+    private bool _isStartParametersSet;
 
     public Vector3 StartOffset => _startOffset;
     public Quaternion StartRotation => _startRotation;
@@ -22,8 +23,10 @@ public class CameraMover : Singleton<CameraMover>
     public Quaternion PreviousCameraRotation => _previousCameraRotation;
     public Quaternion PreviousPlayerRotation => _previousPlayerRotation;
     public Vector3 PreviousPlayerPosition => _previousPlayerPosition;
+    public bool IsStartParametersSet => _isStartParametersSet;
 
     public event UnityAction CameraMovementEffectDisabled;
+    public event UnityAction StartParametersSet;
 
     protected override void Awake()
     {
@@ -82,6 +85,8 @@ public class CameraMover : Singleton<CameraMover>
                 ResetParameters();
                 _startRotation = MainCamera.Instance.transform.rotation;
                 _startOffset = MainCamera.Instance.transform.position - Player.Instance.transform.position;
+                _isStartParametersSet = true;
+                StartParametersSet?.Invoke();
             }
             else
                 Player.Awaked += SetStartParameters;
@@ -100,6 +105,7 @@ public class CameraMover : Singleton<CameraMover>
     private void OnSceneUnloaded(Scene arg0)
     {
         _canMove = false;
+        _isStartParametersSet = false;
     }
 
     private void OnCameraMovementEffectDisabled(Effect effect)

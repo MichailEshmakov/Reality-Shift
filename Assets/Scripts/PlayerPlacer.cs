@@ -13,8 +13,6 @@ public class PlayerPlacer : Singleton<PlayerPlacer>
 
     protected override void Awake()
     {
-        //_startPosition = FindObjectOfType<StartPosition>().transform.position;
-        //_levelBorder = FindObjectOfType<LevelBorder>();
         SceneManager.sceneLoaded += OnSceneLoaded;
         SceneManager.sceneUnloaded += OnSceneUnloaded; ;
         base.Awake();
@@ -47,22 +45,26 @@ public class PlayerPlacer : Singleton<PlayerPlacer>
 
     private void PlacePlayer()
     {
-        if (Player.Instance != null)
+        if (CameraMover.Instance != null)
         {
-            Player.Awaked -= PlacePlayer;
-            if (MainCamera.Instance != null)
+            CameraMover.Awaked -= PlacePlayer;
+            if (CameraMover.Instance.IsStartParametersSet)
             {
-                MainCamera.Awaked -= PlacePlayer;
-                Vector3 positionDifference = _startPosition - Player.Instance.transform.position;
-                Player.Instance.transform.position += positionDifference;
-                MainCamera.Instance.transform.position += positionDifference;
-                PlayerPlaced?.Invoke();
-
+                CameraMover.Instance.StartParametersSet -= PlacePlayer;
+                if (Player.Instance != null)
+                {
+                    Player.Awaked -= PlacePlayer;
+                    Vector3 positionDifference = _startPosition - Player.Instance.transform.position;
+                    Player.Instance.transform.position += positionDifference;
+                    PlayerPlaced?.Invoke();
+                }
+                else
+                    Player.Awaked += PlacePlayer;
             }
             else
-                MainCamera.Awaked += PlacePlayer;
+                CameraMover.Instance.StartParametersSet += PlacePlayer;
         }
         else
-            Player.Awaked += PlacePlayer;
+            CameraMover.Awaked += PlacePlayer;
     }
 }
