@@ -14,31 +14,24 @@ public class PlayerPlacer : Singleton<PlayerPlacer>
     protected override void Awake()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
-        SceneManager.sceneUnloaded += OnSceneUnloaded; ;
         base.Awake();
+        Player.DoWhenAwaked(() => Player.Instance.Died += OnPlayerDied);
         PlacePlayer();
+    }
+
+    private void OnDestroy()
+    {
+        if (Player.Instance != null)
+            Player.Instance.Died -= OnPlayerDied;
     }
 
     private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
     {
-        _levelBorder = FindObjectOfType<LevelBorder>();
-        if (_levelBorder != null)
-            _levelBorder.PlayerOuted += OnPlayerOuted;
-
         _startPosition = FindObjectOfType<StartPosition>().transform.position;
         PlacePlayer();
     }
 
-    private void OnSceneUnloaded(Scene arg0)
-    {
-        if (_levelBorder != null)
-        {
-            _levelBorder.PlayerOuted -= OnPlayerOuted;
-            _levelBorder = null;
-        }
-    }
-
-    private void OnPlayerOuted()
+    private void OnPlayerDied()
     {
         PlacePlayer();
     }
