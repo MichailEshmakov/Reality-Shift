@@ -7,8 +7,12 @@ public abstract class CameraMovingEffect : Effect
     protected override void OnEnable()
     {
         base.OnEnable();
-        CameraMover.Instance.SubscribeCameraMovementEffect(this);
-        CameraMover.Instance.CameraMovementEffectDisabled += OnCameraMovementEffectDisabled;
+        CameraMover.DoWhenAwaked(() =>
+        {
+            CameraMover.Instance.SubscribeCameraMovementEffect(this);
+            CameraMover.Instance.CameraMovementEffectDisabled += OnCameraMovementEffectDisabled;
+        });
+
         PlayerPlacer.PlayerPlaced += OnPlayerPlaced;
         ResetParameters();
     }
@@ -16,7 +20,9 @@ public abstract class CameraMovingEffect : Effect
     protected override void OnDisable()
     {
         base.OnDisable();
-        CameraMover.Instance.CameraMovementEffectDisabled -= OnCameraMovementEffectDisabled;
+        if (CameraMover.Instance != null)
+            CameraMover.Instance.CameraMovementEffectDisabled -= OnCameraMovementEffectDisabled;
+
         PlayerPlacer.PlayerPlaced -= OnPlayerPlaced;
     }
 

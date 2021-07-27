@@ -7,64 +7,55 @@ using UnityEngine.SceneManagement;
 public class PlayerPlacer : Singleton<PlayerPlacer>
 {
     private Vector3 _startPosition;
-    private LevelBorder _levelBorder;
+    private Quaternion _startRotation;
 
     public static event UnityAction PlayerPlaced;
 
     protected override void Awake()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
-        SceneManager.sceneUnloaded += OnSceneUnloaded; ;
         base.Awake();
+        Player.DoWhenAwaked(() => 
+        {
+            _startRotation = Player.Instance.transform.rotation;
+            Player.Instance.Died += OnPlayerDied;
+        });
         PlacePlayer();
+    }
+
+    private void OnDestroy()
+    {
+        if (Player.Instance != null)
+            Player.Instance.Died -= OnPlayerDied;
     }
 
     private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
     {
-        _levelBorder = FindObjectOfType<LevelBorder>();
-        if (_levelBorder != null)
-            _levelBorder.PlayerOuted += OnPlayerOuted;
-
         _startPosition = FindObjectOfType<StartPosition>().transform.position;
         PlacePlayer();
     }
 
-    private void OnSceneUnloaded(Scene arg0)
-    {
-        if (_levelBorder != null)
-        {
-            _levelBorder.PlayerOuted -= OnPlayerOuted;
-            _levelBorder = null;
-        }
-    }
-
-    private void OnPlayerOuted()
+    private void OnPlayerDied()
     {
         PlacePlayer();
     }
 
     private void PlacePlayer()
     {
-        if (CameraMover.Instance != null)
+        CameraMover.DoWhenAwaked(() => 
         {
-            CameraMover.Awaked -= PlacePlayer;
             if (CameraMover.Instance.IsStartParametersSet)
             {
                 CameraMover.Instance.StartParametersSet -= PlacePlayer;
-                if (Player.Instance != null)
+                Player.DoWhenAwaked(() =>
                 {
-                    Player.Awaked -= PlacePlayer;
-                    Vector3 positionDifference = _startPosition - Player.Instance.transform.position;
-                    Player.Instance.transform.position += positionDifference;
+                    Player.Instance.transform.position = _startPosition;
+                    Player.Instance.transform.rotation = _startRotation;
                     PlayerPlaced?.Invoke();
-                }
-                else
-                    Player.Awaked += PlacePlayer;
+                });
             }
             else
                 CameraMover.Instance.StartParametersSet += PlacePlayer;
-        }
-        else
-            CameraMover.Awaked += PlacePlayer;
+        });
     }
 }

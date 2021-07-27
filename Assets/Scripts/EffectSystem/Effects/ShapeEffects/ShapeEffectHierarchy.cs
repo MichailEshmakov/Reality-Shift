@@ -15,17 +15,7 @@ public class ShapeEffectHierarchy : Singleton<ShapeEffectHierarchy>
     protected override void Awake()
     {
         base.Awake();
-        if (Player.Instance != null)
-            TakePlayerComponents();
-        else
-            Player.Awaked += OnPlayerAwaked;
-
-    }
-
-    private void OnPlayerAwaked()
-    {
-        Player.Awaked -= OnPlayerAwaked;
-        TakePlayerComponents();
+        Player.DoWhenAwaked(TakePlayerComponents);
     }
 
     public void AddEffect(ShapeEffect shapeEffect)

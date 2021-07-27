@@ -15,13 +15,14 @@ public class ScaleChangingEffect : Effect
     protected override void OnEnable()
     {
         base.OnEnable();
-        _defaultScale = Player.Instance.transform.localScale;
+        Player.DoWhenAwaked(() => _defaultScale = Player.Instance.transform.localScale);
     }
 
     protected override void OnDisable()
     {
         base.OnDisable();
-        Player.Instance.transform.localScale = _defaultScale;
+        if (Player.Instance != null)
+            Player.Instance.transform.localScale = _defaultScale;
     }
 
     private void Update()

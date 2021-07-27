@@ -15,6 +15,7 @@ public class Player : Singleton<Player>
     private int _inversingCoefficient = 1;
 
     public event UnityAction<int> QuestionsChanged;
+    public event UnityAction Died;
 
     protected override void Awake()
     {
@@ -56,6 +57,19 @@ public class Player : Singleton<Player>
             Vector2 movingInput = _input.Player.Move.ReadValue<Vector2>() * _inversingCoefficient;
             _rigidbody.AddForce(new Vector3(movingInput.x, 0, movingInput.y) * _movingForce * Time.deltaTime);
         }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.TryGetComponent(out LevelBorder levelBorder))
+            Die();
+    }
+
+    private void Die()
+    {
+        Died?.Invoke();
+        _rigidbody.velocity = Vector3.zero;
+        _rigidbody.angularVelocity = Vector3.zero;
     }
 
     public void AddQuestion()
