@@ -20,7 +20,7 @@ public class PlayerPlacer : Singleton<PlayerPlacer>
             _startRotation = Player.Instance.transform.rotation;
             Player.Instance.Died += OnPlayerDied;
         });
-        PlacePlayer();
+        
     }
 
     private void OnDestroy()

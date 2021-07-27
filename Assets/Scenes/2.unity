@@ -1071,7 +1071,7 @@ GameObject:
   - component: {fileID: 735112737}
   - component: {fileID: 735112736}
   m_Layer: 0
-  m_Name: LeftBorder (3)
+  m_Name: FrontBorder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1167,7 +1167,7 @@ GameObject:
   - component: {fileID: 798841783}
   - component: {fileID: 798841782}
   m_Layer: 0
-  m_Name: LeftBorder (2)
+  m_Name: BehindCannonBorder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2052,7 +2052,7 @@ GameObject:
   - component: {fileID: 2142397103}
   - component: {fileID: 2142397102}
   m_Layer: 0
-  m_Name: LeftBorder (1)
+  m_Name: BeforeCannonBorder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

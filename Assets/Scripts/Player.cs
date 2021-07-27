@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Events;
 
 [RequireComponent(typeof(Rigidbody))]
@@ -13,12 +14,20 @@ public class Player : Singleton<Player>
     private PlayerInput _input;
     private Rigidbody _rigidbody;
     private int _inversingCoefficient = 1;
+    private int _questionsOnThisLevel;
 
     public event UnityAction<int> QuestionsChanged;
     public event UnityAction Died;
 
     protected override void Awake()
     {
+        if (_inverseInputEffect != null)
+        {
+            _inverseInputEffect.Disabled += OnInverseInputEffectDisabled;
+            _inverseInputEffect.Enabled += OnInverseInputEffectEnabled;
+        }
+
+        SceneManager.sceneUnloaded += OnSceneUnloaded;
         base.Awake();
         _input = new PlayerInput();
         _rigidbody = GetComponent<Rigidbody>();
@@ -27,22 +36,12 @@ public class Player : Singleton<Player>
     private void OnEnable()
     {
         _input.Enable();
-        if (_inverseInputEffect != null)
-        {
-            _inverseInputEffect.Disabled += OnInverseInputEffectDisabled;
-            _inverseInputEffect.Enabled += OnInverseInputEffectEnabled;
-        }
     }
 
     private void OnDisable()
     {
         if (_input != null)
             _input.Disable();
-        if (_inverseInputEffect != null)
-        {
-            _inverseInputEffect.Disabled -= OnInverseInputEffectDisabled;
-            _inverseInputEffect.Enabled -= OnInverseInputEffectEnabled;
-        }
     }
 
     private void Start()
@@ -59,23 +58,40 @@ public class Player : Singleton<Player>
         }
     }
 
+    private void OnDestroy()
+    {
+        if (_inverseInputEffect != null)
+        {
+            _inverseInputEffect.Disabled -= OnInverseInputEffectDisabled;
+            _inverseInputEffect.Enabled -= OnInverseInputEffectEnabled;
+        }
+    }
+
     private void OnTriggerExit(Collider other)
     {
         if (other.gameObject.TryGetComponent(out LevelBorder levelBorder))
             Die();
     }
 
+    private void OnSceneUnloaded(Scene arg0)
+    {
+        _questions += _questionsOnThisLevel;
+        _questionsOnThisLevel = 0;
+    }
+
     private void Die()
     {
         Died?.Invoke();
+        _questionsOnThisLevel = 0;
+        QuestionsChanged?.Invoke(_questions);
         _rigidbody.velocity = Vector3.zero;
         _rigidbody.angularVelocity = Vector3.zero;
     }
 
     public void AddQuestion()
     {
-        _questions++;
-        QuestionsChanged?.Invoke(_questions);
+        _questionsOnThisLevel++;
+        QuestionsChanged?.Invoke(_questions + _questionsOnThisLevel);
     }
 
     public bool TryPayQuestions(int price)
@@ -83,7 +99,7 @@ public class Player : Singleton<Player>
         if (_questions >= price)
         {
             _questions -= price;
-            QuestionsChanged?.Invoke(_questions);
+            QuestionsChanged?.Invoke(_questions + _questionsOnThisLevel);
             return true;
         }
 

@@ -99,7 +99,6 @@ public class CameraMover : Singleton<CameraMover>
     private void OnSceneUnloaded(Scene arg0)
     {
         _canMove = false;
-        _isStartParametersSet = false;
     }
 
     private void OnCameraMovementEffectDisabled(Effect effect)
@@ -124,7 +123,7 @@ public class CameraMover : Singleton<CameraMover>
             _previousCameraRotation = MainCamera.Instance.transform.rotation;
         }
 
-        if (Player.Instance.transform != null)
+        if (Player.Instance != null)
         {
             _previousPlayerRotation = Player.Instance.transform.rotation;
             _previousPlayerPosition = Player.Instance.transform.position;
