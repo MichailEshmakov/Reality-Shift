@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 public class PlayerPlacer : Singleton<PlayerPlacer>
 {
     private Vector3 _startPosition;
-    private LevelBorder _levelBorder;
+    private Quaternion _startRotation;
 
     public static event UnityAction PlayerPlaced;
 
@@ -15,7 +15,11 @@ public class PlayerPlacer : Singleton<PlayerPlacer>
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
         base.Awake();
-        Player.DoWhenAwaked(() => Player.Instance.Died += OnPlayerDied);
+        Player.DoWhenAwaked(() => 
+        {
+            _startRotation = Player.Instance.transform.rotation;
+            Player.Instance.Died += OnPlayerDied;
+        });
         PlacePlayer();
     }
 
@@ -45,8 +49,8 @@ public class PlayerPlacer : Singleton<PlayerPlacer>
                 CameraMover.Instance.StartParametersSet -= PlacePlayer;
                 Player.DoWhenAwaked(() =>
                 {
-                    Vector3 positionDifference = _startPosition - Player.Instance.transform.position;
-                    Player.Instance.transform.position += positionDifference;
+                    Player.Instance.transform.position = _startPosition;
+                    Player.Instance.transform.rotation = _startRotation;
                     PlayerPlaced?.Invoke();
                 });
             }
