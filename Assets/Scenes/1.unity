@@ -1681,7 +1681,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _label: "\u041C\u0435\u0440\u0446\u0430\u043D\u0438\u0435 \u0441\u0432\u0435\u0442\u0430"
   _icon: {fileID: 0}
-  _price: 0
+  _price: 4
   _colors:
   - {r: 0, g: 1, b: 0.027116776, a: 0}
   - {r: 0.9058824, g: 0.15294118, b: 0.9333334, a: 0}
@@ -1943,7 +1943,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _label: "\u0423\u0434\u043E\u0447\u0435\u0440\u0435\u043D\u0438\u0435 \u043A\u0430\u043C\u0435\u0440\u044B"
   _icon: {fileID: 0}
-  _price: 0
+  _price: 3
   _player: {fileID: 1320433939}
 --- !u!114 &963194231
 MonoBehaviour:
@@ -1971,7 +1971,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _label: "\u0417\u0443\u043C \u043A\u0430\u043C\u0435\u0440\u044B"
   _icon: {fileID: 0}
-  _price: 0
+  _price: 5
   _maxFieldOfView: 90
   _minFieldOfView: 30
   _fieldOfViewSpeed: 120
@@ -1993,7 +1993,7 @@ MonoBehaviour:
   _label: "\u0412\u0440\u0430\u0449\u0435\u043D\u0438\u0435 \u043A\u0430\u043C\u0435\u0440\u044B
     \u0432\u043E\u043A\u0440\u0443\u0433 \u043D\u0430\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u0438\u044F"
   _icon: {fileID: 0}
-  _price: 0
+  _price: 5
   _maxAngle: 180
   _rotationSpeed: 200
   _camera: {fileID: 963194228}
@@ -2011,7 +2011,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _label: "\u0421\u0434\u0432\u0438\u0433\u0438 \u043A\u0430\u043C\u0435\u0440\u044B"
   _icon: {fileID: 0}
-  _price: 0
+  _price: 5
   _maxShift: 2
   speed: 10
 --- !u!114 &963194235
@@ -2029,7 +2029,7 @@ MonoBehaviour:
   _label: "\u041E\u0440\u0442\u043E\u0433\u0440\u0430\u0444\u0438\u0447\u0435\u0441\u043A\u0430\u044F
     \u043A\u0430\u043C\u0435\u0440\u0430"
   _icon: {fileID: 0}
-  _price: 0
+  _price: 4
   _camera: {fileID: 963194227}
 --- !u!114 &963194236
 MonoBehaviour:
@@ -3327,7 +3327,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _label: "\u0424\u043E\u0440\u043C\u0430 \u044F\u0439\u0446\u0430"
   _icon: {fileID: 0}
-  _price: 0
+  _price: 6
   _mesh: {fileID: 8048870288576412449, guid: 3a8dd0b8443bd424b9798fd5a9af7803, type: 3}
 --- !u!23 &1320433937
 MeshRenderer:
@@ -3407,7 +3407,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _label: "\u0418\u043D\u0432\u0435\u0440\u0441\u0438\u044F \u0443\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u0438\u044F"
   _icon: {fileID: 0}
-  _price: 2
+  _price: 4
 --- !u!114 &1320433941
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3422,7 +3422,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _label: "\u0418\u0437\u043C\u0435\u043D\u0435\u043D\u0438\u0435 \u0440\u0430\u0437\u043C\u0435\u0440\u0430"
   _icon: {fileID: 0}
-  _price: 0
+  _price: 3
   _maxScaleCoefficient: 1.5
   _minScaleCoefficient: 0.5
   _changingSpeed: 1
@@ -3468,7 +3468,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _label: "\u0424\u043E\u0440\u043C\u0430 \u043A\u0430\u043F\u0441\u0443\u043B\u044B"
   _icon: {fileID: 0}
-  _price: 0
+  _price: 3
   _mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!4 &1431991901 stripped
 Transform:
