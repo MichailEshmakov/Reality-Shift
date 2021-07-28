@@ -1963,7 +1963,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e99b06addc1828149937566acd5b88f8, type: 3}
   m_Name: 
@@ -1972,9 +1972,11 @@ MonoBehaviour:
   _icon: {fileID: 0}
   _price: 0
   _maxFieldOfView: 90
-  _minFieldOfView: 35
-  _zoomSpeed: 110
-  _camera: {fileID: 963194227}
+  _minFieldOfView: 30
+  _fieldOfViewSpeed: 120
+  _maxOrthographicSize: 15
+  _minOrthographicSize: 3
+  _orthographicSizeSpeed: 24
 --- !u!114 &963194233
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1992,7 +1994,7 @@ MonoBehaviour:
   _icon: {fileID: 0}
   _price: 0
   _maxAngle: 180
-  _rotationSpeed: 100
+  _rotationSpeed: 200
   _camera: {fileID: 963194228}
 --- !u!114 &963194234
 MonoBehaviour:
@@ -2018,7 +2020,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dc311d47dec52324fbc4a4e553b6fac5, type: 3}
   m_Name: 
