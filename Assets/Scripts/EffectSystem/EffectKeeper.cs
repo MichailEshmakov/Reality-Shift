@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,6 +21,14 @@ public class EffectKeeper : Singleton<EffectKeeper>
         base.Awake();
     }
 
+    private void OnDestroy()
+    {
+        foreach (Effect effect in _effects)
+        {
+            Destroy(effect);
+        }
+    }
+
     private void OnBuyingEffectDisablingTried(int price, EffectView view)
     {
         if (_player.TryPayQuestions(price))
@@ -30,11 +37,22 @@ public class EffectKeeper : Singleton<EffectKeeper>
         }
     }
 
-    private void OnDestroy()
+    public List<Effect> GetRandomDisabledEffects(int amount)
     {
-        foreach (Effect effect in _effects)
+        List<Effect> result = new List<Effect>(amount);
+        List<Effect> disabledEffects = _effects.FindAll(effect => effect.enabled == false);
+        for (int i = 0; i < amount; i++)
         {
-            Destroy(effect);
+            if (disabledEffects.Count > 0)
+            {
+                Effect addingEffect = disabledEffects[Random.Range(0, disabledEffects.Count)];
+                disabledEffects.Remove(addingEffect);
+                result.Add(addingEffect);
+            }
+            else
+                break;
         }
+
+        return result;
     }
 }

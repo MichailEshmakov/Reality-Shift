@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+
 public class StartPauser : Singleton<StartPauser>
 {
     [SerializeField] private Button _clearSpace;
@@ -36,7 +37,7 @@ public class StartPauser : Singleton<StartPauser>
     private void OnPlayerPlaced()
     {
         Time.timeScale = 0;
-        if (_startMenu != null)
+        if (PlayerPlacer.Instance.IsFirstPlayerPlacement == false)
             _startMenu.SetActive(true);
     }
 }

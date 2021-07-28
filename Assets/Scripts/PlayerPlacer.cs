@@ -8,7 +8,9 @@ public class PlayerPlacer : Singleton<PlayerPlacer>
 {
     private Vector3 _startPosition;
     private Quaternion _startRotation;
+    private bool _isFirstPlayerPlacement = true;
 
+    public bool IsFirstPlayerPlacement => _isFirstPlayerPlacement;
     public static event UnityAction PlayerPlaced;
 
     protected override void Awake()
@@ -31,12 +33,14 @@ public class PlayerPlacer : Singleton<PlayerPlacer>
 
     private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
     {
+        _isFirstPlayerPlacement = true;
         _startPosition = FindObjectOfType<StartPosition>().transform.position;
         PlacePlayer();
     }
 
     private void OnPlayerDied()
     {
+        _isFirstPlayerPlacement = false;
         PlacePlayer();
     }
 
