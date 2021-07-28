@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class OrthographicCamraEffect : Effect
+public class OrthographicCameraEffect : Effect
 {
     [SerializeField] private Camera _camera;
 
