@@ -1649,7 +1649,6 @@ MonoBehaviour:
   - {fileID: 963194235}
   - {fileID: 910315964}
   - {fileID: 1320433941}
-  - {fileID: 1320433936}
   - {fileID: 1320433944}
   _effectMenuContent: {fileID: 625156385}
   _effectViewPrefab: {fileID: 4905989380209983958, guid: 060a36134be005d4a99bc30467bd67da, type: 3}
@@ -3297,6 +3296,7 @@ MonoBehaviour:
   _movingForce: 75
   _questions: 2
   _inverseInputEffect: {fileID: 1320433940}
+  _platformCoefficient: 0.4
 --- !u!54 &1320433935
 Rigidbody:
   m_ObjectHideFlags: 0

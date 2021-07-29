@@ -818,7 +818,7 @@ MonoBehaviour:
   _disableButton: {fileID: 4416294102577106064}
   _enableButton: {fileID: 4380764419773591599}
   _priceText: {fileID: 585965636585391089}
-  _isTestMode: 1
+  _isTestMode: 0
 --- !u!1 &8017354088166252491
 GameObject:
   m_ObjectHideFlags: 0
