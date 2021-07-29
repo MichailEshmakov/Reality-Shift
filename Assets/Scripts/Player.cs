@@ -8,8 +8,9 @@ using UnityEngine.Events;
 public class Player : Singleton<Player>
 {
     [SerializeField] private float _movingForce;
-    [SerializeField] int _questions;
-    [SerializeField] InverseInputEffect _inverseInputEffect;
+    [SerializeField] private int _questions;
+    [SerializeField] private InverseInputEffect _inverseInputEffect;
+    [SerializeField] private float _platformCoefficient;
 
     private PlayerInput _input;
     private Rigidbody _rigidbody;
@@ -31,6 +32,8 @@ public class Player : Singleton<Player>
         base.Awake();
         _input = new PlayerInput();
         _rigidbody = GetComponent<Rigidbody>();
+        if (Application.platform == RuntimePlatform.WindowsEditor)
+            _platformCoefficient = 1;
     }
 
     private void OnEnable()
@@ -54,7 +57,7 @@ public class Player : Singleton<Player>
         if (Application.platform != RuntimePlatform.WindowsEditor || _input.Player.AllowMove.phase == UnityEngine.InputSystem.InputActionPhase.Started)
         {
             Vector2 movingInput = _input.Player.Move.ReadValue<Vector2>() * _inversingCoefficient;
-            _rigidbody.AddForce(new Vector3(movingInput.x, 0, movingInput.y) * _movingForce * Time.deltaTime);
+            _rigidbody.AddForce(new Vector3(movingInput.x, 0, movingInput.y) * _movingForce * _platformCoefficient * Time.deltaTime);
         }
     }
 
