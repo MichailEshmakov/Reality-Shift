@@ -8,7 +8,7 @@ public class Question : MonoBehaviour
 
     private void Awake()
     {
-        Player.DoWhenAwaked(() => Player.Instance.Died += OnPlayerDied);
+        Ball.DoWhenAwaked(() => Ball.Instance.Died += OnBallDied);
     }
 
     private void Update()
@@ -18,20 +18,20 @@ public class Question : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (Player.Instance != null)
-            Player.Instance.Died -= OnPlayerDied;
+        if (Ball.Instance != null)
+            Ball.Instance.Died -= OnBallDied;
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.TryGetComponent(out Player player))
+        if (other.TryGetComponent(out Ball ball))
         {
-            player.AddQuestion();
+            QuestionScore.Instance.AddQuestion();
             gameObject.SetActive(false);
         }
     }
 
-    private void OnPlayerDied()
+    private void OnBallDied()
     {
         gameObject.SetActive(true);
     }

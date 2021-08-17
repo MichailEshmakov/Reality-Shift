@@ -12,14 +12,14 @@ public class StartPauser : Singleton<StartPauser>
     protected override void Awake()
     {
         base.Awake();
-        PlayerPlacer.PlayerPlaced += OnPlayerPlaced;
+        BallPlacer.BallPlaced += OnBallPlaced;
         if (_clearSpace != null)
             _clearSpace.onClick.AddListener(OnClearSpaceClick);
     }
 
     private void OnDestroy()
     {
-        PlayerPlacer.PlayerPlaced -= OnPlayerPlaced;
+        BallPlacer.BallPlaced -= OnBallPlaced;
         if (_clearSpace != null)
             _clearSpace.onClick.RemoveListener(OnClearSpaceClick);
     }
@@ -34,10 +34,10 @@ public class StartPauser : Singleton<StartPauser>
         }
     }
 
-    private void OnPlayerPlaced()
+    private void OnBallPlaced()
     {
         Time.timeScale = 0;
-        if (PlayerPlacer.Instance.IsFirstPlayerPlacement == false)
+        if (BallPlacer.Instance.IsFirstBallPlacement == false)
             _startMenu.SetActive(true);
     }
 }

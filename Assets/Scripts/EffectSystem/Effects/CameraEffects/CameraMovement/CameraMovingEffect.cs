@@ -13,7 +13,7 @@ public abstract class CameraMovingEffect : Effect
             CameraMover.Instance.CameraMovementEffectDisabled += OnCameraMovementEffectDisabled;
         });
 
-        PlayerPlacer.PlayerPlaced += OnPlayerPlaced;
+        BallPlacer.BallPlaced += OnBallPlaced;
         ResetParameters();
     }
 
@@ -23,10 +23,10 @@ public abstract class CameraMovingEffect : Effect
         if (CameraMover.Instance != null)
             CameraMover.Instance.CameraMovementEffectDisabled -= OnCameraMovementEffectDisabled;
 
-        PlayerPlacer.PlayerPlaced -= OnPlayerPlaced;
+        BallPlacer.BallPlaced -= OnBallPlaced;
     }
 
-    private void OnPlayerPlaced()
+    private void OnBallPlaced()
     {
         ResetParameters();
     }

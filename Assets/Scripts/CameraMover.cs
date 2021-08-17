@@ -12,8 +12,8 @@ public class CameraMover : Singleton<CameraMover>
     private Quaternion _resultAdditiveRotation;
     private Vector3 _previousCameraPosition;
     private Quaternion _previousCameraRotation;
-    private Quaternion _previousPlayerRotation;
-    private Vector3 _previousPlayerPosition;
+    private Quaternion _previousBallRotation;
+    private Vector3 _previousBallPosition;
     private bool _canMove;
     private bool _isStartParametersSet;
 
@@ -21,8 +21,8 @@ public class CameraMover : Singleton<CameraMover>
     public Quaternion StartRotation => _startRotation;
     public Vector3 PreviousCameraPosition => _previousCameraPosition;
     public Quaternion PreviousCameraRotation => _previousCameraRotation;
-    public Quaternion PreviousPlayerRotation => _previousPlayerRotation;
-    public Vector3 PreviousPlayerPosition => _previousPlayerPosition;
+    public Quaternion PreviousBallRotation => _previousBallRotation;
+    public Vector3 PreviousBallPosition => _previousBallPosition;
     public bool IsStartParametersSet => _isStartParametersSet;
 
     public event UnityAction CameraMovementEffectDisabled;
@@ -37,13 +37,13 @@ public class CameraMover : Singleton<CameraMover>
     private void OnEnable()
     {
         SceneManager.sceneUnloaded += OnSceneUnloaded;
-        PlayerPlacer.PlayerPlaced += OnPlayerPlaced;
+        BallPlacer.BallPlaced += OnBallPlaced;
     }
 
     private void OnDisable()
     {
         SceneManager.sceneUnloaded -= OnSceneUnloaded;
-        PlayerPlacer.PlayerPlaced -= OnPlayerPlaced;
+        BallPlacer.BallPlaced -= OnBallPlaced;
     }
 
     private void LateUpdate()
@@ -78,18 +78,18 @@ public class CameraMover : Singleton<CameraMover>
     {
         MainCamera.DoWhenAwaked(() =>
         {
-            Player.DoWhenAwaked(() =>
+            Ball.DoWhenAwaked(() =>
             {
                 ResetParameters();
                 _startRotation = MainCamera.Instance.transform.rotation;
-                _startOffset = MainCamera.Instance.transform.position - Player.Instance.transform.position;
+                _startOffset = MainCamera.Instance.transform.position - Ball.Instance.transform.position;
                 _isStartParametersSet = true;
                 StartParametersSet?.Invoke();
             });
         });
     }
 
-    private void OnPlayerPlaced()
+    private void OnBallPlaced()
     {
         ResetCameraPosition();
         ResetParameters();
@@ -123,10 +123,10 @@ public class CameraMover : Singleton<CameraMover>
             _previousCameraRotation = MainCamera.Instance.transform.rotation;
         }
 
-        if (Player.Instance != null)
+        if (Ball.Instance != null)
         {
-            _previousPlayerRotation = Player.Instance.transform.rotation;
-            _previousPlayerPosition = Player.Instance.transform.position;
+            _previousBallRotation = Ball.Instance.transform.rotation;
+            _previousBallPosition = Ball.Instance.transform.position;
         }
     }
 
@@ -135,8 +135,8 @@ public class CameraMover : Singleton<CameraMover>
         if (MainCamera.Instance != null)
         {
             MainCamera.Instance.transform.rotation = _startRotation;
-            if (Player.Instance != null)
-                MainCamera.Instance.transform.position = Player.Instance.transform.position + _startOffset;
+            if (Ball.Instance != null)
+                MainCamera.Instance.transform.position = Ball.Instance.transform.position + _startOffset;
         }
     }
 }

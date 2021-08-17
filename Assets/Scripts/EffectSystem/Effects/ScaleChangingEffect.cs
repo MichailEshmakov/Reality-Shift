@@ -15,14 +15,14 @@ public class ScaleChangingEffect : Effect
     protected override void OnEnable()
     {
         base.OnEnable();
-        Player.DoWhenAwaked(() => _defaultScale = Player.Instance.transform.localScale);
+        Ball.DoWhenAwaked(() => _defaultScale = Ball.Instance.transform.localScale);
     }
 
     protected override void OnDisable()
     {
         base.OnDisable();
-        if (Player.Instance != null)
-            Player.Instance.transform.localScale = _defaultScale;
+        if (Ball.Instance != null)
+            Ball.Instance.transform.localScale = _defaultScale;
     }
 
     private void Update()
@@ -30,7 +30,7 @@ public class ScaleChangingEffect : Effect
         if (Time.timeScale > 0)
         {
             _currentScaleCoefficient = Mathf.MoveTowards(_currentScaleCoefficient, _isScaleIncreasing ? _maxScaleCoefficient : _minScaleCoefficient, _changingSpeed * Time.deltaTime);
-            Player.Instance.transform.localScale = _defaultScale * _currentScaleCoefficient;
+            Ball.Instance.transform.localScale = _defaultScale * _currentScaleCoefficient;
 
             if (_isScaleIncreasing && _currentScaleCoefficient >= _maxScaleCoefficient)
                 _isScaleIncreasing = false;

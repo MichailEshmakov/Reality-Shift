@@ -8,14 +8,14 @@ public class ShapeEffectHierarchy : Singleton<ShapeEffectHierarchy>
     [SerializeField] private List<ShapeEffect> _shapeEffects;
     [SerializeField] private Mesh _defaultMesh;
 
-    private MeshCollider _playersCollider;
-    private MeshFilter _playersMeshFilter;
+    private MeshCollider _ballsCollider;
+    private MeshFilter _ballsMeshFilter;
     private ShapeEffect _currentEffect;
 
     protected override void Awake()
     {
         base.Awake();
-        Player.DoWhenAwaked(TakePlayerComponents);
+        Ball.DoWhenAwaked(TakeBallComponents);
     }
 
     public void AddEffect(ShapeEffect shapeEffect)
@@ -51,15 +51,15 @@ public class ShapeEffectHierarchy : Singleton<ShapeEffectHierarchy>
 
     private void ApplyShape(Mesh mesh)
     {
-        if (_playersCollider != null)
-            _playersCollider.sharedMesh = mesh;
-        if (_playersMeshFilter != null)
-            _playersMeshFilter.mesh = mesh;
+        if (_ballsCollider != null)
+            _ballsCollider.sharedMesh = mesh;
+        if (_ballsMeshFilter != null)
+            _ballsMeshFilter.mesh = mesh;
     }
 
-    private void TakePlayerComponents()
+    private void TakeBallComponents()
     {
-        _playersCollider = Player.Instance.GetComponent<MeshCollider>();
-        _playersMeshFilter = Player.Instance.GetComponent<MeshFilter>();
+        _ballsCollider = Ball.Instance.GetComponent<MeshCollider>();
+        _ballsMeshFilter = Ball.Instance.GetComponent<MeshFilter>();
     }
 }

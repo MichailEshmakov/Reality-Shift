@@ -38,8 +38,12 @@ public class CameraZoomEffect : Effect
 
     protected override void OnDisable()
     {
-        _camera.fieldOfView = _startFieldOfView;
-        _camera.orthographicSize = _startOrthographicSize;
+        if (_camera != null)
+        {
+            _camera.fieldOfView = _startFieldOfView;
+            _camera.orthographicSize = _startOrthographicSize;
+        }
+
         base.OnDisable();
     }
 

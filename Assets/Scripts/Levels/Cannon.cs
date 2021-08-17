@@ -28,9 +28,9 @@ public class Cannon : ObjectPool
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.TryGetComponent(out Player player))
+        if (other.TryGetComponent(out Ball ball))
         {
-            _target = player.transform;
+            _target = ball.transform;
             StartCoroutine(RotateToTarget());
             StartCoroutine(TryShoot());
         }
@@ -38,7 +38,7 @@ public class Cannon : ObjectPool
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.TryGetComponent(out Player player))
+        if (other.TryGetComponent(out Ball ball))
             _target = null;
     }
 
@@ -68,7 +68,7 @@ public class Cannon : ObjectPool
         bullet = null;
         return Time.time - _lastShootingTime >= _shootingDelay
             && Physics.Raycast(_raycastOrigin.position, -transform.forward, out RaycastHit hit, _shootingRadius, _layerMask)
-            && hit.collider.gameObject.TryGetComponent(out Player player)
+            && hit.collider.gameObject.TryGetComponent(out Ball ball)
             && TryGetObject(out GameObject bulletGameObject)
             && bulletGameObject.TryGetComponent(out bullet);
     }

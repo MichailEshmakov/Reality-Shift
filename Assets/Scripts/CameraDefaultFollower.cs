@@ -6,6 +6,6 @@ public class CameraDefaultFollower : Singleton<CameraDefaultFollower>
 {
     private void Update()
     {
-        CameraMover.Instance.AddPosition(Player.Instance.transform.position - CameraMover.Instance.PreviousPlayerPosition);
+        CameraMover.Instance.AddPosition(Ball.Instance.transform.position - CameraMover.Instance.PreviousBallPosition);
     }
 }

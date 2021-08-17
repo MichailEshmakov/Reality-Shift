@@ -9,13 +9,13 @@ public class QuestionsPanel : MonoBehaviour
 
     private void Awake()
     {
-        Player.DoWhenAwaked(() => Player.Instance.QuestionsChanged += OnQuestionsChanged);
+        QuestionScore.DoWhenAwaked(() => QuestionScore.Instance.QuestionsChanged += OnQuestionsChanged);
     }
 
     private void OnDestroy()
     {
-        if (Player.Instance != null)
-            Player.Instance.QuestionsChanged -= OnQuestionsChanged;
+        if (QuestionScore.Instance != null)
+            QuestionScore.Instance.QuestionsChanged -= OnQuestionsChanged;
     }
 
     public void OnQuestionsChanged(int questions)

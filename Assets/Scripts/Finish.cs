@@ -8,29 +8,29 @@ public class Finish : MonoBehaviour
 {
     [SerializeField] private float _endDelay;
 
-    bool _isPlayerInside;
+    bool _isBallInside;
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.TryGetComponent(out Player player))
+        if (other.gameObject.TryGetComponent(out Ball ball))
         {
-            _isPlayerInside = true;
+            _isBallInside = true;
             StartCoroutine(WaitFinish());
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.TryGetComponent(out Player player))
+        if (other.gameObject.TryGetComponent(out Ball ball))
         {
-            _isPlayerInside = false;
+            _isBallInside = false;
         }
     }
 
     private IEnumerator WaitFinish()
     {
         yield return new WaitForSeconds(_endDelay);
-        if (_isPlayerInside)
+        if (_isBallInside)
             FinishLevel();
     }
 

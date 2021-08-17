@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EffectKeeper : Singleton<EffectKeeper>
 {
-    [SerializeField] private Player _player;
+    [SerializeField] private QuestionScore _questionScore;
     [SerializeField] private List<Effect> _effects;
     [SerializeField] private Transform _effectMenuContent;
     [SerializeField] private EffectView _effectViewPrefab;
@@ -31,7 +31,7 @@ public class EffectKeeper : Singleton<EffectKeeper>
 
     private void OnBuyingEffectDisablingTried(int price, EffectView view)
     {
-        if (_player.TryPayQuestions(price))
+        if (_questionScore.TryPayQuestions(price))
         {
             view.OnEffectDisablingBought();
         }

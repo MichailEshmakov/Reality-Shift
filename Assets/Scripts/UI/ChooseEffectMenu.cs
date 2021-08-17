@@ -14,7 +14,7 @@ public class ChooseEffectMenu : MonoBehaviour
     private void Awake()
     {
         _chooseEffectButtons = new List<ChooseEffectButton>(_chooseEffectButtonPlaces.Count);
-        PlayerPlacer.PlayerPlaced += OnPlayerPlaced;
+        BallPlacer.BallPlaced += OnBallPlaced;
     }
 
     private void OnDisable()
@@ -31,12 +31,12 @@ public class ChooseEffectMenu : MonoBehaviour
 
     private void OnDestroy()
     {
-        PlayerPlacer.PlayerPlaced -= OnPlayerPlaced;
+        BallPlacer.BallPlaced -= OnBallPlaced;
     }
 
-    private void OnPlayerPlaced()
+    private void OnBallPlaced()
     {
-        if (PlayerPlacer.Instance.IsFirstPlayerPlacement)
+        if (BallPlacer.Instance.IsFirstBallPlacement)
         {
             gameObject.SetActive(true);
             CreateChooseEffectButtons();
