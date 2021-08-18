@@ -14,7 +14,7 @@ public class CameraDrillEffect : CameraMovingEffect
     private void Update()
     {
         _currentAngle += _rotationSpeed * Time.deltaTime * _directionCoefficient;
-        CameraMover.Instance.AddRotation(Quaternion.AngleAxis(_rotationSpeed * Time.deltaTime * _directionCoefficient, _camera.forward));
+        CameraMover.AddRotation(Quaternion.AngleAxis(_rotationSpeed * Time.deltaTime * _directionCoefficient, _camera.forward));
 
         if (_directionCoefficient >= 0 && _currentAngle >= _maxAngle)
         {

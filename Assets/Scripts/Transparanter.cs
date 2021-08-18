@@ -7,6 +7,8 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class Transparanter : MonoBehaviour
 {
+    [SerializeField] private Ball _ball;
+    [SerializeField] private Camera _mainCamera;
     [SerializeField] private List<Effect> _offsetChangingEffects;
     [SerializeField] private Material _transparentMaterial;
 
@@ -18,13 +20,8 @@ public class Transparanter : MonoBehaviour
     {
         _collider = GetComponent<CapsuleCollider>();
         _transparentedObjects = new Dictionary<GameObject, Material>();
-        Ball.DoWhenAwaked(() =>
-        {
-            MainCamera.DoWhenAwaked(() =>
-            {
-                SetColliderSize(Ball.Instance.transform.position - MainCamera.Instance.transform.position);
-            });
-        });
+        SetColliderSize(_ball.transform.position - _mainCamera.transform.position);
+
         foreach (Effect effect in _offsetChangingEffects)
         {
             effect.Enabled += OnOffsetChangingEffectEnabled;
@@ -34,7 +31,7 @@ public class Transparanter : MonoBehaviour
 
     private void FixedUpdate()
     {
-        Vector3 fromCameratoBall = Ball.Instance.transform.position - MainCamera.Instance.transform.position;
+        Vector3 fromCameratoBall = _ball.transform.position - _mainCamera.transform.position;
         transform.rotation = Quaternion.LookRotation(fromCameratoBall);
         if (_isAnyoOffsetChangingEffectEnable)
             SetColliderSize(fromCameratoBall);

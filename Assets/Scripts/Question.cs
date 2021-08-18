@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class Question : MonoBehaviour
 {
-    [SerializeField] float _rotationSpeed;
+    [SerializeField] private Ball _ball;
+    [SerializeField] private QuestionScore _questionScore;
+    [SerializeField] private float _rotationSpeed;
 
     private void Awake()
     {
-        Ball.DoWhenAwaked(() => Ball.Instance.Died += OnBallDied);
+        _ball.Died += OnBallDied;
     }
 
     private void Update()
@@ -18,15 +20,15 @@ public class Question : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (Ball.Instance != null)
-            Ball.Instance.Died -= OnBallDied;
+        if (_ball != null)
+            _ball.Died -= OnBallDied;
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.TryGetComponent(out Ball ball))
         {
-            QuestionScore.Instance.AddQuestion();
+            _questionScore.AddQuestion();
             gameObject.SetActive(false);
         }
     }

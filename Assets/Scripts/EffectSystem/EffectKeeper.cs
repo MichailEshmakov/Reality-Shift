@@ -2,14 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EffectKeeper : Singleton<EffectKeeper>
+public class EffectKeeper : MonoBehaviour
 {
     [SerializeField] private QuestionScore _questionScore;
     [SerializeField] private List<Effect> _effects;
     [SerializeField] private Transform _effectMenuContent;
     [SerializeField] private EffectView _effectViewPrefab;
 
-    protected override void Awake()
+    private void Awake()
     {
         foreach (Effect effect in _effects)
         {
@@ -17,8 +17,6 @@ public class EffectKeeper : Singleton<EffectKeeper>
             newView.Init(effect);
             newView.BuyingEffectDisablingTried += OnBuyingEffectDisablingTried;
         }
-
-        base.Awake();
     }
 
     private void OnDestroy()

@@ -4,25 +4,29 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Events;
 
-public class QuestionScore : Singleton<QuestionScore>
+public class QuestionScore : MonoBehaviour
 {
     [SerializeField] private int _questions;
     [SerializeField] private Ball _ball;
+    [SerializeField] private QuestionsPanel _questionsPanel;
 
     private int _questionsOnThisLevel;
 
     public event UnityAction<int> QuestionsChanged;
 
-    protected override void Awake()
+    private void Awake()
     {
         SceneManager.sceneUnloaded += OnSceneUnloaded;
-        Ball.DoWhenAwaked(() => Ball.Instance.Died += OnBallDied);
-        base.Awake();
+        _ball.Died += OnBallDied;
+        if (_questionsPanel.IsSubscribedOnQuestionsChanged)
+            InvokeQuestionsChanged();
+        else
+            _questionsPanel.SubscribedOnQuestionsChanged += InvokeQuestionsChanged;
     }
 
-    private void Start()
+    private void InvokeQuestionsChanged()
     {
-        QuestionsChanged?.Invoke(_questions);// TODO: Сделать это, когда панель вопросов подпишется
+        QuestionsChanged?.Invoke(_questions);
     }
 
     private void OnBallDied()

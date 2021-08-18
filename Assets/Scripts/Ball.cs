@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Events;
 
 [RequireComponent(typeof(Rigidbody))]
-public class Ball : Singleton<Ball>
+public class Ball : MonoBehaviour
 {
     [SerializeField] private float _movingForce;
     [SerializeField] private InverseInputEffect _inverseInputEffect;
@@ -17,7 +17,7 @@ public class Ball : Singleton<Ball>
 
     public event UnityAction Died;
 
-    protected override void Awake()
+    private void Awake()
     {
         if (_inverseInputEffect != null)
         {
@@ -25,7 +25,6 @@ public class Ball : Singleton<Ball>
             _inverseInputEffect.Enabled += OnInverseInputEffectEnabled;
         }
 
-        base.Awake();
         _input = new PlayerInput();
         _rigidbody = GetComponent<Rigidbody>();
         if (Application.platform == RuntimePlatform.WindowsEditor)

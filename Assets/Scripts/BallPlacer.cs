@@ -4,31 +4,30 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
-public class BallPlacer : Singleton<BallPlacer>
+public class BallPlacer : MonoBehaviour
 {
+    [SerializeField] private Ball _ball;
+    [SerializeField] private CameraMover _cameraMover;
+
     private Vector3 _startPosition;
     private Quaternion _startRotation;
     private bool _isFirstBallPlacement = true;
 
     public bool IsFirstBallPlacement => _isFirstBallPlacement;
-    public static event UnityAction BallPlaced;
+    public event UnityAction BallPlaced;
 
-    protected override void Awake()
+    private void Awake()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
-        base.Awake();
-        Ball.DoWhenAwaked(() => 
-        {
-            _startRotation = Ball.Instance.transform.rotation;
-            Ball.Instance.Died += OnBallDied;
-        });
+        _startRotation = _ball.transform.rotation;
+        _ball.Died += OnBallDied;
         
     }
 
     private void OnDestroy()
     {
-        if (Ball.Instance != null)
-            Ball.Instance.Died -= OnBallDied;
+        if (_ball != null)
+            _ball.Died -= OnBallDied;
     }
 
     private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
@@ -46,20 +45,14 @@ public class BallPlacer : Singleton<BallPlacer>
 
     private void PlaceBall()
     {
-        CameraMover.DoWhenAwaked(() => 
+        if (_cameraMover.IsStartParametersSet)
         {
-            if (CameraMover.Instance.IsStartParametersSet)
-            {
-                CameraMover.Instance.StartParametersSet -= PlaceBall;
-                Ball.DoWhenAwaked(() =>
-                {
-                    Ball.Instance.transform.position = _startPosition;
-                    Ball.Instance.transform.rotation = _startRotation;
-                    BallPlaced?.Invoke();
-                });
-            }
-            else
-                CameraMover.Instance.StartParametersSet += PlaceBall;
-        });
+            _cameraMover.StartParametersSet -= PlaceBall;
+            _ball.transform.position = _startPosition;
+            _ball.transform.rotation = _startRotation;
+            BallPlaced?.Invoke();
+        }
+        else
+            _cameraMover.StartParametersSet += PlaceBall;
     }
 }

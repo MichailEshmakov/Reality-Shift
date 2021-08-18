@@ -4,8 +4,11 @@ using UnityEngine;
 
 public class CameraDefaultFollower : Singleton<CameraDefaultFollower>
 {
+    [SerializeField] private Ball _ball;
+    [SerializeField] private CameraMover _cameraMover;
+
     private void Update()
     {
-        CameraMover.Instance.AddPosition(Ball.Instance.transform.position - CameraMover.Instance.PreviousBallPosition);
+        _cameraMover.AddPosition(_ball.transform.position - _cameraMover.PreviousBallPosition);
     }
 }

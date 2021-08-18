@@ -3,19 +3,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShapeEffectHierarchy : Singleton<ShapeEffectHierarchy>
+public class ShapeEffectHierarchy : MonoBehaviour
 {
     [SerializeField] private List<ShapeEffect> _shapeEffects;
     [SerializeField] private Mesh _defaultMesh;
+    [SerializeField] private Ball _ball;
 
     private MeshCollider _ballsCollider;
     private MeshFilter _ballsMeshFilter;
     private ShapeEffect _currentEffect;
 
-    protected override void Awake()
+    private void Awake()
     {
-        base.Awake();
-        Ball.DoWhenAwaked(TakeBallComponents);
+        _ballsCollider = _ball.GetComponent<MeshCollider>();
+        _ballsMeshFilter = _ball.GetComponent<MeshFilter>();
     }
 
     public void AddEffect(ShapeEffect shapeEffect)
@@ -55,11 +56,5 @@ public class ShapeEffectHierarchy : Singleton<ShapeEffectHierarchy>
             _ballsCollider.sharedMesh = mesh;
         if (_ballsMeshFilter != null)
             _ballsMeshFilter.mesh = mesh;
-    }
-
-    private void TakeBallComponents()
-    {
-        _ballsCollider = Ball.Instance.GetComponent<MeshCollider>();
-        _ballsMeshFilter = Ball.Instance.GetComponent<MeshFilter>();
     }
 }

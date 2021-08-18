@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class CameraZoomEffect : Effect
 {
+    [SerializeField] private Camera _mainCamera;
     [Header("Perspective")]
     [SerializeField] private float _maxFieldOfView;
     [SerializeField] private float _minFieldOfView;
@@ -13,35 +14,30 @@ public class CameraZoomEffect : Effect
     [SerializeField] private float _minOrthographicSize;
     [SerializeField] private float _orthographicSizeSpeed;
     
-    private Camera _camera;
     private bool _isInreasing;
     private float _startFieldOfView;
     private float _startOrthographicSize;
 
     private void Awake()
     {
-        MainCamera.DoWhenAwaked(() =>
-        {
-            _camera = MainCamera.Instance.GetComponent<Camera>();
-            _startOrthographicSize = _camera.orthographicSize;
-            _startFieldOfView = _camera.fieldOfView;
-        });
+        _startOrthographicSize = _mainCamera.orthographicSize;
+        _startFieldOfView = _mainCamera.fieldOfView;
     }
 
     private void LateUpdate()
     {
-        if (_camera.orthographic)
-            _camera.orthographicSize = Zoom(_maxOrthographicSize, _minOrthographicSize, _camera.orthographicSize, _orthographicSizeSpeed);
+        if (_mainCamera.orthographic)
+            _mainCamera.orthographicSize = Zoom(_maxOrthographicSize, _minOrthographicSize, _mainCamera.orthographicSize, _orthographicSizeSpeed);
         else
-            _camera.fieldOfView = Zoom(_maxFieldOfView, _minFieldOfView, _camera.fieldOfView, _fieldOfViewSpeed);
+            _mainCamera.fieldOfView = Zoom(_maxFieldOfView, _minFieldOfView, _mainCamera.fieldOfView, _fieldOfViewSpeed);
     }
 
     protected override void OnDisable()
     {
-        if (_camera != null)
+        if (_mainCamera != null)
         {
-            _camera.fieldOfView = _startFieldOfView;
-            _camera.orthographicSize = _startOrthographicSize;
+            _mainCamera.fieldOfView = _startFieldOfView;
+            _mainCamera.orthographicSize = _startOrthographicSize;
         }
 
         base.OnDisable();

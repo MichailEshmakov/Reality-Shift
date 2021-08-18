@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class ScaleChangingEffect : Effect
 {
+    [SerializeField] private Ball _ball;
     [SerializeField] private float _maxScaleCoefficient;
     [SerializeField] private float _minScaleCoefficient;
     [SerializeField] private float _changingSpeed;
@@ -15,14 +16,14 @@ public class ScaleChangingEffect : Effect
     protected override void OnEnable()
     {
         base.OnEnable();
-        Ball.DoWhenAwaked(() => _defaultScale = Ball.Instance.transform.localScale);
+        _defaultScale = _ball.transform.localScale;
     }
 
     protected override void OnDisable()
     {
         base.OnDisable();
-        if (Ball.Instance != null)
-            Ball.Instance.transform.localScale = _defaultScale;
+        if (_ball != null)
+            _ball.transform.localScale = _defaultScale;
     }
 
     private void Update()
@@ -30,7 +31,7 @@ public class ScaleChangingEffect : Effect
         if (Time.timeScale > 0)
         {
             _currentScaleCoefficient = Mathf.MoveTowards(_currentScaleCoefficient, _isScaleIncreasing ? _maxScaleCoefficient : _minScaleCoefficient, _changingSpeed * Time.deltaTime);
-            Ball.Instance.transform.localScale = _defaultScale * _currentScaleCoefficient;
+            _ball.transform.localScale = _defaultScale * _currentScaleCoefficient;
 
             if (_isScaleIncreasing && _currentScaleCoefficient >= _maxScaleCoefficient)
                 _isScaleIncreasing = false;
