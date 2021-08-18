@@ -12,11 +12,8 @@ public abstract class CameraMovingEffect : Effect
     protected override void OnEnable()
     {
         base.OnEnable();
-        CameraMover.DoWhenAwaked(() =>
-        {
-            _cameraMover.SubscribeCameraMovementEffect(this);
-            _cameraMover.CameraMovementEffectDisabled += OnCameraMovementEffectDisabled;
-        });
+        _cameraMover.SubscribeCameraMovementEffect(this);
+        _cameraMover.CameraMovementEffectDisabled += OnCameraMovementEffectDisabled;
 
         _ballPlacer.BallPlaced += OnBallPlaced;
         ResetParameters();

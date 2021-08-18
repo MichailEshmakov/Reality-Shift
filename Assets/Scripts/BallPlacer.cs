@@ -45,7 +45,7 @@ public class BallPlacer : MonoBehaviour
 
     private void PlaceBall()
     {
-        if (_cameraMover.IsStartParametersSet)
+        if (_cameraMover.IsStartParametersSet && _ball != null)
         {
             _cameraMover.StartParametersSet -= PlaceBall;
             _ball.transform.position = _startPosition;

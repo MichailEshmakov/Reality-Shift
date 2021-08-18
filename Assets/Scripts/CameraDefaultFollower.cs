@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraDefaultFollower : Singleton<CameraDefaultFollower>
+public class CameraDefaultFollower : MonoBehaviour
 {
     [SerializeField] private Ball _ball;
     [SerializeField] private CameraMover _cameraMover;

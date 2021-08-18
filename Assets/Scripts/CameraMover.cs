@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
-public class CameraMover : Singleton<CameraMover>
+public class CameraMover : MonoBehaviour
 {
     [SerializeField] private Ball _ball;
     [SerializeField] private BallPlacer _ballPlacer;
@@ -32,10 +32,13 @@ public class CameraMover : Singleton<CameraMover>
     public event UnityAction CameraMovementEffectDisabled;
     public event UnityAction StartParametersSet;
 
-    protected override void Awake()
+    private void Awake()
     {
-        SetStartParameters();
-        base.Awake();
+        ResetParameters();
+        _startRotation = _mainCamera.transform.rotation;
+        _startOffset = _mainCamera.transform.position - _ball.transform.position;
+        _isStartParametersSet = true;
+        StartParametersSet?.Invoke();
     }
 
     private void OnEnable()
@@ -76,15 +79,6 @@ public class CameraMover : Singleton<CameraMover>
     public void SubscribeCameraMovementEffect(CameraMovingEffect effect)
     {
         effect.Disabled += OnCameraMovementEffectDisabled;
-    }
-
-    private void SetStartParameters()
-    {
-        ResetParameters();
-        _startRotation = _mainCamera.transform.rotation;
-        _startOffset = _mainCamera.transform.position - _ball.transform.position;
-        _isStartParametersSet = true;
-        StartParametersSet?.Invoke();
     }
 
     private void OnBallPlaced()
