@@ -2,13 +2,16 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
 public class Finish : MonoBehaviour
 {
     [SerializeField] private float _endDelay;
 
-    bool _isBallInside;
+    private bool _isBallInside;
+
+    public event UnityAction LevelFinished;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -36,10 +39,6 @@ public class Finish : MonoBehaviour
 
     private void FinishLevel()
     {
-        int currentLevelIndex = SceneManager.GetActiveScene().buildIndex;
-        if (currentLevelIndex != SceneManager.sceneCountInBuildSettings - 1)
-            SceneManager.LoadScene(currentLevelIndex + 1);
-        else
-            SceneManager.LoadScene(0);
+        LevelFinished?.Invoke();
     }
 }

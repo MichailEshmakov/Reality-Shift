@@ -1,32 +1,53 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.Events;
 
 public class QuestionScore : MonoBehaviour
 {
-    [SerializeField] private int _questions;
     [SerializeField] private Ball _ball;
     [SerializeField] private QuestionsPanel _questionsPanel;
+    [SerializeField] private LevelGroupKeeper _levelGroupKeeper;
+    [SerializeField] private SaveSystem _saveSystem;
 
+    private int _questions;
     private int _questionsOnThisLevel;
+    private Finish _finish;
 
     public event UnityAction<int> QuestionsChanged;
+    public event UnityAction<int> LevelQuestionsRecorded;
 
     private void Awake()
     {
-        SceneManager.sceneUnloaded += OnSceneUnloaded;
+        SetFinish();
         _ball.Died += OnBallDied;
-        if (_questionsPanel.IsSubscribedOnQuestionsChanged)
-            InvokeQuestionsChanged();
+        
+        if (_levelGroupKeeper.LevelGroup.GetCurrentLevelIndex() == 0)
+            _questions = _levelGroupKeeper.LevelGroup.StartQuestions;
+        else if (_saveSystem.IsProgressDownloaded)
+            SetSavedQuestions();
         else
-            _questionsPanel.SubscribedOnQuestionsChanged += InvokeQuestionsChanged;
+            _saveSystem.ProgressDownloaded += OnProgressDownloaded;
+
+        TryInvokeQuestionsChanged();
     }
 
-    private void InvokeQuestionsChanged()
+    private void OnDestroy()
     {
-        QuestionsChanged?.Invoke(_questions);
+        _ball.Died -= OnBallDied;
+        _finish.LevelFinished -= OnLevelFinished;
+        _saveSystem.ProgressDownloaded -= OnProgressDownloaded;
+    }
+
+    private void TryInvokeQuestionsChanged()
+    {
+        if (_questionsPanel.IsSubscribedOnQuestionsChanged)
+        {
+            _questionsPanel.SubscribedOnQuestionsChanged -= TryInvokeQuestionsChanged;
+            QuestionsChanged?.Invoke(_questions);
+        }
+        else
+            _questionsPanel.SubscribedOnQuestionsChanged += TryInvokeQuestionsChanged;
     }
 
     private void OnBallDied()
@@ -35,10 +56,30 @@ public class QuestionScore : MonoBehaviour
         QuestionsChanged?.Invoke(_questions);
     }
 
-    private void OnSceneUnloaded(Scene arg0)
+    private void OnLevelFinished()
     {
         _questions += _questionsOnThisLevel;
         _questionsOnThisLevel = 0;
+        LevelQuestionsRecorded?.Invoke(_questions);
+    }
+
+    private void SetFinish()
+    {
+        _finish = FindObjectOfType<Finish>();
+        if (_finish == null)
+            Debug.Log("�� ������ ����� ������");
+        else
+            _finish.LevelFinished += OnLevelFinished;
+    }
+
+    private void OnProgressDownloaded()
+    {
+        SetSavedQuestions();
+    }
+
+    private void SetSavedQuestions()
+    {
+        _questions = _saveSystem.SavedQuestions;
     }
 
     public void AddQuestion()

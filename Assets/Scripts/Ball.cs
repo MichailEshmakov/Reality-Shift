@@ -23,6 +23,8 @@ public class Ball : MonoBehaviour
         {
             _inverseInputEffect.Disabled += OnInverseInputEffectDisabled;
             _inverseInputEffect.Enabled += OnInverseInputEffectEnabled;
+            if (_inverseInputEffect.enabled)
+                _inversingCoefficient = -1;
         }
 
         _input = new PlayerInput();
@@ -41,8 +43,6 @@ public class Ball : MonoBehaviour
         if (_input != null)
             _input.Disable();
     }
-
-
 
     private void FixedUpdate()
     {
@@ -74,8 +74,6 @@ public class Ball : MonoBehaviour
         _rigidbody.velocity = Vector3.zero;
         _rigidbody.angularVelocity = Vector3.zero;
     }
-
-
 
     private void OnInverseInputEffectDisabled(Effect effect)
     {
