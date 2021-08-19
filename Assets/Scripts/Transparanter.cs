@@ -16,7 +16,7 @@ public class Transparanter : MonoBehaviour
     private bool _isAnyoOffsetChangingEffectEnable;
     private Dictionary<GameObject, Material> _transparentedObjects;
 
-    private void Awake()
+    private void Start()
     {
         _collider = GetComponent<CapsuleCollider>();
         _transparentedObjects = new Dictionary<GameObject, Material>();

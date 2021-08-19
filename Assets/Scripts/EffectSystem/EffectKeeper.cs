@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class EffectKeeper : MonoBehaviour
 {
@@ -9,8 +10,14 @@ public class EffectKeeper : MonoBehaviour
     [SerializeField] private Transform _effectMenuContent;
     [SerializeField] private EffectView _effectViewPrefab;
     [SerializeField] private SaveSystem _saveSystem;
+    [SerializeField] private TestModeSetter _testModeSetter;
 
-    private void Awake()
+    private bool _isSavedEffectsEnabled = false;
+
+    public event UnityAction SavedEffectsEnabled;
+    public bool IsSavedEffectsEnabled => _isSavedEffectsEnabled;
+
+    private void Start()
     {
         if (_saveSystem.IsProgressDownloaded)
             EnableSavedEffects();
@@ -20,7 +27,7 @@ public class EffectKeeper : MonoBehaviour
         foreach (Effect effect in _effects)
         {
             EffectView newView = Instantiate(_effectViewPrefab, _effectMenuContent);
-            newView.Init(effect);
+            newView.Init(effect, _testModeSetter.IsTestMode);
             newView.BuyingEffectDisablingTried += OnBuyingEffectDisablingTried;
         }
     }
@@ -46,6 +53,8 @@ public class EffectKeeper : MonoBehaviour
         {
             _effects[effectIndex].enabled = true;
         }
+
+        SavedEffectsEnabled?.Invoke();
     }
 
     private void OnBuyingEffectDisablingTried(int price, EffectView view)

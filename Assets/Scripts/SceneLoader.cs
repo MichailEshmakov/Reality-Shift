@@ -8,7 +8,6 @@ public class SceneLoader : MonoBehaviour
 {
     [SerializeField] private int _defaultSceneIndex;
     [SerializeField] private SaveSystem _saveSystem;
-    [SerializeField] private LevelGroupKeeper _levelGroupKeeper;
 
     private Finish _finish;
     private bool _isLevelFinished = false;

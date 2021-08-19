@@ -17,7 +17,7 @@ public class QuestionScore : MonoBehaviour
     public event UnityAction<int> QuestionsChanged;
     public event UnityAction<int> LevelQuestionsRecorded;
 
-    private void Awake()
+    private void Start()
     {
         SetFinish();
         _ball.Died += OnBallDied;

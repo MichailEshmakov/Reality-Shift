@@ -11,14 +11,17 @@ public class BallPlacer : MonoBehaviour
 
     private Vector3 _startPosition;
     private Quaternion _startRotation;
+    private bool _isBallPlaced = false;
     private bool _isFirstBallPlacement = true;
 
+    public bool IsBallPlaced => _isBallPlaced;
     public bool IsFirstBallPlacement => _isFirstBallPlacement;
     public event UnityAction BallPlaced;
 
     private void Awake()
     {
-        SceneManager.sceneLoaded += OnSceneLoaded;
+        _startPosition = FindObjectOfType<StartPosition>().transform.position;
+        PlaceBall();
         _startRotation = _ball.transform.rotation;
         _ball.Died += OnBallDied;
         
@@ -28,13 +31,6 @@ public class BallPlacer : MonoBehaviour
     {
         if (_ball != null)
             _ball.Died -= OnBallDied;
-    }
-
-    private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
-    {
-        _isFirstBallPlacement = true;
-        _startPosition = FindObjectOfType<StartPosition>().transform.position;
-        PlaceBall();
     }
 
     private void OnBallDied()
@@ -50,6 +46,7 @@ public class BallPlacer : MonoBehaviour
             _cameraMover.StartParametersSet -= PlaceBall;
             _ball.transform.position = _startPosition;
             _ball.transform.rotation = _startRotation;
+            _isBallPlaced = true;
             BallPlaced?.Invoke();
         }
         else
