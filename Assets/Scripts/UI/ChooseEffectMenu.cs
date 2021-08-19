@@ -5,16 +5,18 @@ using UnityEngine;
 
 public class ChooseEffectMenu : MonoBehaviour
 {
+    [SerializeField] private EffectKeeper _effectKeeper;
     [SerializeField] private List<Transform> _chooseEffectButtonPlaces;
     [SerializeField] private ChooseEffectButton _chooseEffectButtonTemplate;
     [SerializeField] private GameObject _startMenu;
+    [SerializeField] private BallPlacer _ballPlacer;
 
     private List<ChooseEffectButton> _chooseEffectButtons;
 
     private void Awake()
     {
         _chooseEffectButtons = new List<ChooseEffectButton>(_chooseEffectButtonPlaces.Count);
-        PlayerPlacer.PlayerPlaced += OnPlayerPlaced;
+        _ballPlacer.BallPlaced += OnBallPlaced;
     }
 
     private void OnDisable()
@@ -31,12 +33,12 @@ public class ChooseEffectMenu : MonoBehaviour
 
     private void OnDestroy()
     {
-        PlayerPlacer.PlayerPlaced -= OnPlayerPlaced;
+        _ballPlacer.BallPlaced -= OnBallPlaced;
     }
 
-    private void OnPlayerPlaced()
+    private void OnBallPlaced()
     {
-        if (PlayerPlacer.Instance.IsFirstPlayerPlacement)
+        if (_ballPlacer.IsFirstBallPlacement)
         {
             gameObject.SetActive(true);
             CreateChooseEffectButtons();
@@ -45,22 +47,19 @@ public class ChooseEffectMenu : MonoBehaviour
 
     private void CreateChooseEffectButtons()
     {
-        EffectKeeper.DoWhenAwaked(() =>
+        List<Effect> randomEffects = _effectKeeper.GetRandomDisabledEffects(_chooseEffectButtonPlaces.Count);
+        if (randomEffects.Count > 0)
         {
-            List<Effect> randomEffects = EffectKeeper.Instance.GetRandomDisabledEffects(_chooseEffectButtonPlaces.Count);
-            if (randomEffects.Count > 0)
+            for (int i = 0; i < randomEffects.Count; i++)
             {
-                for (int i = 0; i < randomEffects.Count; i++)
-                {
-                    ChooseEffectButton chooseEffectButton = Instantiate(_chooseEffectButtonTemplate, _chooseEffectButtonPlaces[i]);
-                    chooseEffectButton.Init(randomEffects[i]);
-                    chooseEffectButton.Clicked += OnChooseEffectButtonClicked;
-                    _chooseEffectButtons.Add(chooseEffectButton);
-                }
+                ChooseEffectButton chooseEffectButton = Instantiate(_chooseEffectButtonTemplate, _chooseEffectButtonPlaces[i]);
+                chooseEffectButton.Init(randomEffects[i]);
+                chooseEffectButton.Clicked += OnChooseEffectButtonClicked;
+                _chooseEffectButtons.Add(chooseEffectButton);
             }
-            else
-                gameObject.SetActive(false);
-        });
+        }
+        else
+            gameObject.SetActive(false);
     }
 
 

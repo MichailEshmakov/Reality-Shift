@@ -3,23 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class StartPauser : Singleton<StartPauser>
+public class StartPauser : MonoBehaviour
 {
+    [SerializeField] private BallPlacer _ballPlacer;
     [SerializeField] private Button _clearSpace;
     [SerializeField] private GameObject _startMenu;
     [SerializeField] private List<GameObject> _menus;
 
-    protected override void Awake()
+    private void Awake()
     {
-        base.Awake();
-        PlayerPlacer.PlayerPlaced += OnPlayerPlaced;
+        _ballPlacer.BallPlaced += OnBallPlaced;
         if (_clearSpace != null)
             _clearSpace.onClick.AddListener(OnClearSpaceClick);
     }
 
     private void OnDestroy()
     {
-        PlayerPlacer.PlayerPlaced -= OnPlayerPlaced;
+        _ballPlacer.BallPlaced -= OnBallPlaced;
         if (_clearSpace != null)
             _clearSpace.onClick.RemoveListener(OnClearSpaceClick);
     }
@@ -34,10 +34,10 @@ public class StartPauser : Singleton<StartPauser>
         }
     }
 
-    private void OnPlayerPlaced()
+    private void OnBallPlaced()
     {
         Time.timeScale = 0;
-        if (PlayerPlacer.Instance.IsFirstPlayerPlacement == false)
+        if (_ballPlacer.IsFirstBallPlacement == false)
             _startMenu.SetActive(true);
     }
 }

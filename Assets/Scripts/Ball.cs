@@ -5,31 +5,28 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Events;
 
 [RequireComponent(typeof(Rigidbody))]
-public class Player : Singleton<Player>
+public class Ball : MonoBehaviour
 {
     [SerializeField] private float _movingForce;
-    [SerializeField] private int _questions;
     [SerializeField] private InverseInputEffect _inverseInputEffect;
     [SerializeField] private float _platformCoefficient;
 
     private PlayerInput _input;
     private Rigidbody _rigidbody;
     private int _inversingCoefficient = 1;
-    private int _questionsOnThisLevel;
 
-    public event UnityAction<int> QuestionsChanged;
     public event UnityAction Died;
 
-    protected override void Awake()
+    private void Awake()
     {
         if (_inverseInputEffect != null)
         {
             _inverseInputEffect.Disabled += OnInverseInputEffectDisabled;
             _inverseInputEffect.Enabled += OnInverseInputEffectEnabled;
+            if (_inverseInputEffect.enabled)
+                _inversingCoefficient = -1;
         }
 
-        SceneManager.sceneUnloaded += OnSceneUnloaded;
-        base.Awake();
         _input = new PlayerInput();
         _rigidbody = GetComponent<Rigidbody>();
         if (Application.platform == RuntimePlatform.WindowsEditor)
@@ -45,11 +42,6 @@ public class Player : Singleton<Player>
     {
         if (_input != null)
             _input.Disable();
-    }
-
-    private void Start()
-    {
-        QuestionsChanged?.Invoke(_questions);
     }
 
     private void FixedUpdate()
@@ -76,37 +68,11 @@ public class Player : Singleton<Player>
             Die();
     }
 
-    private void OnSceneUnloaded(Scene arg0)
-    {
-        _questions += _questionsOnThisLevel;
-        _questionsOnThisLevel = 0;
-    }
-
     private void Die()
     {
         Died?.Invoke();
-        _questionsOnThisLevel = 0;
-        QuestionsChanged?.Invoke(_questions);
         _rigidbody.velocity = Vector3.zero;
         _rigidbody.angularVelocity = Vector3.zero;
-    }
-
-    public void AddQuestion()
-    {
-        _questionsOnThisLevel++;
-        QuestionsChanged?.Invoke(_questions + _questionsOnThisLevel);
-    }
-
-    public bool TryPayQuestions(int price)
-    {
-        if (_questions >= price)
-        {
-            _questions -= price;
-            QuestionsChanged?.Invoke(_questions + _questionsOnThisLevel);
-            return true;
-        }
-
-        return false;
     }
 
     private void OnInverseInputEffectDisabled(Effect effect)

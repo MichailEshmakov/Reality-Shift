@@ -8,7 +8,7 @@ public class LevelBorder : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {
         if (other.TryGetComponent(out Transparanter transparanter) == false)
-            if (other.TryGetComponent(out Player player) == false)
+            if (other.TryGetComponent(out Ball ball) == false)
                 if (other.TryGetComponent(out KinematicChanger changer) == false || changer.IsKinematicChangingOnThisFrame == false)
                     other.gameObject.SetActive(false);
     }

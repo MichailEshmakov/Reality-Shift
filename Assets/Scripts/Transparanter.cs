@@ -7,6 +7,8 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class Transparanter : MonoBehaviour
 {
+    [SerializeField] private Ball _ball;
+    [SerializeField] private Camera _mainCamera;
     [SerializeField] private List<Effect> _offsetChangingEffects;
     [SerializeField] private Material _transparentMaterial;
 
@@ -18,13 +20,8 @@ public class Transparanter : MonoBehaviour
     {
         _collider = GetComponent<CapsuleCollider>();
         _transparentedObjects = new Dictionary<GameObject, Material>();
-        Player.DoWhenAwaked(() =>
-        {
-            MainCamera.DoWhenAwaked(() =>
-            {
-                SetColliderSize(Player.Instance.transform.position - MainCamera.Instance.transform.position);
-            });
-        });
+        SetColliderSize(_ball.transform.position - _mainCamera.transform.position);
+
         foreach (Effect effect in _offsetChangingEffects)
         {
             effect.Enabled += OnOffsetChangingEffectEnabled;
@@ -34,10 +31,10 @@ public class Transparanter : MonoBehaviour
 
     private void FixedUpdate()
     {
-        Vector3 fromCameratoPlayer = Player.Instance.transform.position - MainCamera.Instance.transform.position;
-        transform.rotation = Quaternion.LookRotation(fromCameratoPlayer);
+        Vector3 fromCameratoBall = _ball.transform.position - _mainCamera.transform.position;
+        transform.rotation = Quaternion.LookRotation(fromCameratoBall);
         if (_isAnyoOffsetChangingEffectEnable)
-            SetColliderSize(fromCameratoPlayer);
+            SetColliderSize(fromCameratoBall);
     }
 
     private void OnDestroy()
@@ -76,7 +73,7 @@ public class Transparanter : MonoBehaviour
     private bool CheckTransparantable(GameObject checkingObject, out MeshRenderer renderer)
     {
         renderer = null;
-        return checkingObject.TryGetComponent(out Player player) == false
+        return checkingObject.TryGetComponent(out Ball ball) == false
             && checkingObject.TryGetComponent(out Question question) == false
             && checkingObject.TryGetComponent(out renderer);
     }
@@ -96,9 +93,9 @@ public class Transparanter : MonoBehaviour
         _isAnyoOffsetChangingEffectEnable = _offsetChangingEffects.Any(effect => effect.enabled);
     }
 
-    private void SetColliderSize(Vector3 fromCameratoPlayer)
+    private void SetColliderSize(Vector3 fromCameratoBall)
     {
-        _collider.height = fromCameratoPlayer.magnitude;
+        _collider.height = fromCameratoBall.magnitude;
         _collider.center = new Vector3(_collider.center.x, _collider.center.y, _collider.height / 2);
     }
 }

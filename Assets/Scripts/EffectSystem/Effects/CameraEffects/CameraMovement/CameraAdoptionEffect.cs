@@ -4,20 +4,20 @@ using UnityEngine;
 
 public class CameraAdoptionEffect : CameraMovingEffect
 {
-    [SerializeField] private Transform _player;
+    [SerializeField] private Transform _ball;
 
-    private Quaternion _onEnablePlayerRotation;
+    private Quaternion _onEnableBallRotation;
 
     private void Update()
     {
-        CameraMover.Instance.AddPosition((_player.rotation * Quaternion.Inverse(_onEnablePlayerRotation) * CameraMover.Instance.StartOffset) 
-            - (CameraMover.Instance.PreviousPlayerRotation * Quaternion.Inverse(_onEnablePlayerRotation) * CameraMover.Instance.StartOffset));
-        CameraMover.Instance.AddRotation(_player.rotation * Quaternion.Inverse(CameraMover.Instance.PreviousPlayerRotation));
+        CameraMover.AddPosition((_ball.rotation * Quaternion.Inverse(_onEnableBallRotation) * CameraMover.StartOffset) 
+            - (CameraMover.PreviousBallRotation * Quaternion.Inverse(_onEnableBallRotation) * CameraMover.StartOffset));
+        CameraMover.AddRotation(_ball.rotation * Quaternion.Inverse(CameraMover.PreviousBallRotation));
     }
 
     protected override void OnEnable()
     {
         base.OnEnable();
-        _onEnablePlayerRotation = _player.rotation;
+        _onEnableBallRotation = _ball.rotation;
     }
 }

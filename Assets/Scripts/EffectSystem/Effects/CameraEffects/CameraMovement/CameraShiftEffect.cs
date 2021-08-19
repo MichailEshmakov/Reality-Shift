@@ -6,7 +6,7 @@ using Random = UnityEngine.Random;
 public class CameraShiftEffect : CameraMovingEffect
 {
     [SerializeField] private float _maxShift;
-    [SerializeField] private float speed;
+    [SerializeField] private float _speed;
 
     private float _currentShift;
     private Vector3 _shiftDirection;
@@ -14,8 +14,8 @@ public class CameraShiftEffect : CameraMovingEffect
 
     private void Update()
     {
-        float adding = Mathf.MoveTowards(_currentShift, _isIncreasingShift ? _maxShift : 0, speed * Time.deltaTime) - _currentShift; 
-        CameraMover.Instance.AddPosition(_shiftDirection * adding);
+        float adding = Mathf.MoveTowards(_currentShift, _isIncreasingShift ? _maxShift : 0, _speed * Time.deltaTime) - _currentShift;
+        CameraMover.AddPosition(_shiftDirection * adding);
         _currentShift += adding;
 
         if (_isIncreasingShift && _currentShift >= _maxShift)
