@@ -11,6 +11,7 @@ public class TestModeSetter : MonoBehaviour
 
     private void Start()
     {
-        _startMenu.gameObject.SetActive(true);
+        if (_isTestMode)
+            _startMenu.gameObject.SetActive(true);
     }
 }

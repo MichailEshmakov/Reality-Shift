@@ -11,6 +11,7 @@ public class ChooseEffectMenu : MonoBehaviour
     [SerializeField] private StartMenu _startMenu;
     [SerializeField] private BallPlacer _ballPlacer;
     [SerializeField] private TestModeSetter _testModeSetter;
+    [SerializeField] private LevelGroupKeeper _levelGroupKeeper;
 
     private List<ChooseEffectButton> _chooseEffectButtons;
 
@@ -50,9 +51,18 @@ public class ChooseEffectMenu : MonoBehaviour
     {
         if (_ballPlacer.IsFirstBallPlacement)
         {
-            gameObject.SetActive(true);
-            CreateChooseEffectButtons();
+            if (_effectKeeper.IsSavedEffectsEnabled || _levelGroupKeeper.LevelGroup.GetCurrentLevelIndex() == 0)
+                Activate();
+            else
+                _effectKeeper.SavedEffectsEnabled += Activate;
         }
+    }
+
+    private void Activate()
+    {
+        _effectKeeper.SavedEffectsEnabled -= Activate;
+        gameObject.SetActive(true);
+        CreateChooseEffectButtons();
     }
 
     private void CreateChooseEffectButtons()
@@ -71,8 +81,6 @@ public class ChooseEffectMenu : MonoBehaviour
         else
             gameObject.SetActive(false);
     }
-
-
 
     private void OnChooseEffectButtonClicked()
     {

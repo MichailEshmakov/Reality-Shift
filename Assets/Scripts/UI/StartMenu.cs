@@ -7,7 +7,7 @@ public class StartMenu : MonoBehaviour
     [SerializeField] private BallPlacer _ballPlacer;
     [SerializeField] private TestModeSetter _testModeSetter;
 
-    private void Awake()
+    private void Start()
     {
         if (_testModeSetter.IsTestMode)
         {
