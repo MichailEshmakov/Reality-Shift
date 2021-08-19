@@ -12,26 +12,30 @@ public class EffectView : MonoBehaviour
     [SerializeField] private Button _disableButton;
     [SerializeField] private Button _enableButton;
     [SerializeField] private TMP_Text _priceText;
-    [SerializeField] private bool _isTestMode;
 
     private Effect _effect;
+    private bool _isTestMode;
 
     public UnityAction<int, EffectView> BuyingEffectDisablingTried;
 
-    public void Init(Effect effect)
+    public void Init(Effect effect, bool isTestMode)
     {
+        _isTestMode = isTestMode;
         _effect = effect;
         _label.text = _effect.Label;
         _icon.sprite = _effect.Icon;
 
-        _priceText.text = _effect.Price.ToString();
+        _priceText.text = isTestMode ? "0" : _effect.Price.ToString();
 
         _effect.Enabled += OnEffectEnabled;
         _effect.Disabled += OnEffectDisabled;
         _effect.Destroyed += OnEffectDestroyed;
 
         _disableButton.onClick.AddListener(TryBuyEffectDisabling);
-        _enableButton.onClick.AddListener(EnableEffect);
+        if (_isTestMode)
+            _enableButton.onClick.AddListener(EnableEffect);
+        else
+            _enableButton.gameObject.SetActive(false);
 
         SetButtonsInteractibling();
         gameObject.SetActive(_effect.enabled || _isTestMode);
@@ -40,7 +44,7 @@ public class EffectView : MonoBehaviour
     public void TryBuyEffectDisabling()
     {
         if (_effect.enabled)
-            BuyingEffectDisablingTried?.Invoke(_effect.Price, this);
+            BuyingEffectDisablingTried?.Invoke(_isTestMode ? 0 : _effect.Price, this);
         else
             SetButtonsInteractibling();
     }
