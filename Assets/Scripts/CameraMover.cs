@@ -44,7 +44,10 @@ public class CameraMover : MonoBehaviour
     private void OnEnable()
     {
         SceneManager.sceneUnloaded += OnSceneUnloaded;
-        _ballPlacer.BallPlaced += OnBallPlaced;
+        if (_ballPlacer.IsBallPlaced)
+            OnBallPlaced();
+
+        _ballPlacer.BallPlaced += OnBallPlaced;    
     }
 
     private void OnDisable()

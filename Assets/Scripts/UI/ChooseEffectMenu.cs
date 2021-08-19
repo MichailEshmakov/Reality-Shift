@@ -8,27 +8,37 @@ public class ChooseEffectMenu : MonoBehaviour
     [SerializeField] private EffectKeeper _effectKeeper;
     [SerializeField] private List<Transform> _chooseEffectButtonPlaces;
     [SerializeField] private ChooseEffectButton _chooseEffectButtonTemplate;
-    [SerializeField] private GameObject _startMenu;
+    [SerializeField] private StartMenu _startMenu;
     [SerializeField] private BallPlacer _ballPlacer;
+    [SerializeField] private TestModeSetter _testModeSetter;
 
     private List<ChooseEffectButton> _chooseEffectButtons;
 
     private void Awake()
     {
-        _chooseEffectButtons = new List<ChooseEffectButton>(_chooseEffectButtonPlaces.Count);
-        _ballPlacer.BallPlaced += OnBallPlaced;
+        if (_testModeSetter.IsTestMode == false)
+        {
+            _chooseEffectButtons = new List<ChooseEffectButton>(_chooseEffectButtonPlaces.Count);
+            if (_ballPlacer.IsBallPlaced)
+                OnBallPlaced();
+
+            _ballPlacer.BallPlaced += OnBallPlaced;
+        }
     }
 
     private void OnDisable()
     {
-        foreach (ChooseEffectButton button in _chooseEffectButtons)
+        if (_testModeSetter.IsTestMode == false)
         {
-            button.Clicked -= OnChooseEffectButtonClicked;
-            Destroy(button.gameObject);
-        }
+            foreach (ChooseEffectButton button in _chooseEffectButtons)
+            {
+                button.Clicked -= OnChooseEffectButtonClicked;
+                Destroy(button.gameObject);
+            }
 
-        _chooseEffectButtons.Clear();
-        _startMenu.SetActive(true);
+            _chooseEffectButtons.Clear();
+            _startMenu.gameObject.SetActive(true);
+        }
     }
 
     private void OnDestroy()
