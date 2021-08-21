@@ -8,9 +8,12 @@ public class LevelGroup : ScriptableObject
 {
     [SerializeField] private int _startQuestions;
     [SerializeField] private List<Level> _levels;
-    // TODO: пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
+    [SerializeField] private string _title;
+    [SerializeField] private string _number;
 
     public int StartQuestions => _startQuestions;
+    public string Title => _title;
+    public string Number => _number;
 
     public int GetCurrentLevelIndex()
     {
@@ -18,12 +21,31 @@ public class LevelGroup : ScriptableObject
         return _levels.FindIndex(level => level.SceneIndex == currentSceneIndex);
     }
 
-    public int GetNextSceneIndex()
+    public int GetNextSceneIndex()//TODO Заменить на TRY
     {
         int currentLevelIndex = GetCurrentLevelIndex();
         if (currentLevelIndex == -1 || currentLevelIndex == _levels.Count - 1)
             return -1;
         else
             return _levels[currentLevelIndex + 1].SceneIndex;
+    }
+
+    public bool HasLevel(int sceneIndex)
+    {
+        return _levels.Exists(level => level.SceneIndex == sceneIndex);
+    }
+
+    public bool TryGetFirstLevelSceneIndex(out int firstLevelSceneIndex)
+    {
+        if (_levels.Count > 0)
+        {
+            firstLevelSceneIndex = _levels[0].SceneIndex;
+            return true;
+        }
+        else
+        {
+            firstLevelSceneIndex = -1;
+            return true;
+        }
     }
 }
