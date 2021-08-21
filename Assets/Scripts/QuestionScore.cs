@@ -8,7 +8,7 @@ public class QuestionScore : MonoBehaviour
     [SerializeField] private Ball _ball;
     [SerializeField] private QuestionsPanel _questionsPanel;
     [SerializeField] private LevelGroupKeeper _levelGroupKeeper;
-    [SerializeField] private SaveSystem _saveSystem;
+    [SerializeField] private LevelSaveSystem _levelSaveSystem;
 
     private int _questions;
     private int _questionsOnThisLevel;
@@ -24,10 +24,10 @@ public class QuestionScore : MonoBehaviour
         
         if (_levelGroupKeeper.LevelGroup.GetCurrentLevelIndex() == 0)
             _questions = _levelGroupKeeper.LevelGroup.StartQuestions;
-        else if (_saveSystem.IsProgressDownloaded)
-            SetSavedQuestions();
+        else if (_levelSaveSystem.IsProgressDownloaded)
+            OnProgressDownloaded();
         else
-            _saveSystem.ProgressDownloaded += OnProgressDownloaded;
+            _levelSaveSystem.ProgressDownloaded += OnProgressDownloaded;
 
         TryInvokeQuestionsChanged();
     }
@@ -36,7 +36,7 @@ public class QuestionScore : MonoBehaviour
     {
         _ball.Died -= OnBallDied;
         _finish.LevelFinished -= OnLevelFinished;
-        _saveSystem.ProgressDownloaded -= OnProgressDownloaded;
+        _levelSaveSystem.ProgressDownloaded -= OnProgressDownloaded;
     }
 
     private void TryInvokeQuestionsChanged()
@@ -67,19 +67,14 @@ public class QuestionScore : MonoBehaviour
     {
         _finish = FindObjectOfType<Finish>();
         if (_finish == null)
-            Debug.Log("�� ������ ����� ������");
+            Debug.LogError($"Finish is not found by {gameObject.name}");
         else
             _finish.LevelFinished += OnLevelFinished;
     }
 
     private void OnProgressDownloaded()
     {
-        SetSavedQuestions();
-    }
-
-    private void SetSavedQuestions()
-    {
-        _questions = _saveSystem.SavedQuestions;
+        _questions = _levelSaveSystem.CurrentLevelGroupProgress.Questions;
     }
 
     public void AddQuestion()

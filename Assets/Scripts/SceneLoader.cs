@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 public class SceneLoader : MonoBehaviour
 {
     [SerializeField] private int _defaultSceneIndex;
-    [SerializeField] private SaveSystem _saveSystem;
+    [SerializeField] private LevelSaveSystem _levelSaveSystem;
 
     private Finish _finish;
     private bool _isLevelFinished = false;
@@ -15,17 +15,18 @@ public class SceneLoader : MonoBehaviour
     private void Awake()
     {
         SetFinish();
-        _saveSystem.ProgressSaved += OnProgressSaved;
+        _levelSaveSystem.ProgressSaved += OnProgressSaved;
     }
 
     private void OnDestroy()
     {
         _finish.LevelFinished -= OnLevelFinished;
-        _saveSystem.ProgressSaved -= OnProgressSaved;
+        _levelSaveSystem.ProgressSaved -= OnProgressSaved;
     }
 
-    private void OnProgressSaved(int nextSceneIndex)
+    private void OnProgressSaved()
     {
+        int nextSceneIndex = _levelSaveSystem.CurrentLevelGroupProgress.SceneIndex;
         if (_isLevelFinished)
         {
             if (nextSceneIndex > 0 && nextSceneIndex < SceneManager.sceneCountInBuildSettings)
@@ -44,7 +45,7 @@ public class SceneLoader : MonoBehaviour
     {
         _finish = FindObjectOfType<Finish>();
         if (_finish == null)
-            Debug.Log("Не найден конец уровня");
+            Debug.LogError($"Finish is not found by {gameObject.name}");
         else
             _finish.LevelFinished += OnLevelFinished;
     }

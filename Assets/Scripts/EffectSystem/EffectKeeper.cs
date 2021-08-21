@@ -9,7 +9,7 @@ public class EffectKeeper : MonoBehaviour
     [SerializeField] private List<Effect> _effects;
     [SerializeField] private Transform _effectMenuContent;
     [SerializeField] private EffectView _effectViewPrefab;
-    [SerializeField] private SaveSystem _saveSystem;
+    [SerializeField] private LevelSaveSystem _levelSaveSystem;
     [SerializeField] private TestModeSetter _testModeSetter;
 
     private bool _isSavedEffectsEnabled = false;
@@ -19,10 +19,10 @@ public class EffectKeeper : MonoBehaviour
 
     private void Start()
     {
-        if (_saveSystem.IsProgressDownloaded)
+        if (_levelSaveSystem.IsProgressDownloaded)
             EnableSavedEffects();
         else
-            _saveSystem.ProgressDownloaded += OnProgressDownloaded;
+            _levelSaveSystem.ProgressDownloaded += OnProgressDownloaded;
 
         foreach (Effect effect in _effects)
         {
@@ -34,7 +34,7 @@ public class EffectKeeper : MonoBehaviour
 
     private void OnDestroy()
     {
-        _saveSystem.ProgressDownloaded -= OnProgressDownloaded;
+        _levelSaveSystem.ProgressDownloaded -= OnProgressDownloaded;
         foreach (Effect effect in _effects)
         {
             Destroy(effect);
@@ -48,7 +48,7 @@ public class EffectKeeper : MonoBehaviour
 
     private void EnableSavedEffects()
     {
-        int[] savedEffectIndexes = _saveSystem.SavedEffectIndexes;
+        int[] savedEffectIndexes = _levelSaveSystem.CurrentLevelGroupProgress.EffectIndexes;
         foreach (int effectIndex in savedEffectIndexes)
         {
             _effects[effectIndex].enabled = true;
