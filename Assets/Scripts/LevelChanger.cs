@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class SceneLoader : MonoBehaviour
+public class LevelChanger : MonoBehaviour
 {
     [SerializeField] private int _defaultSceneIndex;
     [SerializeField] private LevelSaveSystem _levelSaveSystem;
