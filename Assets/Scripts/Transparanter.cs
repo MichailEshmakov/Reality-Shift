@@ -48,13 +48,13 @@ public class Transparanter : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (CheckTransparantable(other.gameObject, out MeshRenderer renderer))
+        if (CheckTransparantable(other.gameObject, out MeshRenderer renderer) && _transparentedObjects.ContainsKey(other.gameObject) == false)
         {
             Material newMaterial = new Material(_transparentMaterial)
             {
                 color = new Color(renderer.material.color.r, renderer.material.color.g, renderer.material.color.b, _transparentMaterial.color.a)
             };
-                
+            
             _transparentedObjects.Add(other.gameObject, renderer.material);
             renderer.material = newMaterial;
         }            

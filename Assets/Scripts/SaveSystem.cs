@@ -14,6 +14,12 @@ public class SaveSystem : MonoBehaviour
         ProgressSaved?.Invoke();
     }
 
+    protected void ResetProgress(string levelGroupName)
+    {
+        LevelGroupProgress emptyProgress = new LevelGroupProgress();
+        SaveProgress(emptyProgress, levelGroupName);
+    }
+
     protected LevelGroupProgress DownloadProgress(string levelGroupName)
     {
         string jsonProgressData = PlayerPrefs.GetString(levelGroupName);

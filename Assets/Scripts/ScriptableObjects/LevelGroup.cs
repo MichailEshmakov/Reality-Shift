@@ -21,7 +21,7 @@ public class LevelGroup : ScriptableObject
         return _levels.FindIndex(level => level.SceneIndex == currentSceneIndex);
     }
 
-    public int GetNextSceneIndex()//TODO Заменить на TRY
+    public int GetNextSceneIndex()
     {
         int currentLevelIndex = GetCurrentLevelIndex();
         if (currentLevelIndex == -1 || currentLevelIndex == _levels.Count - 1)
