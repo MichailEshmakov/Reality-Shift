@@ -10,7 +10,6 @@ public class BallMover : MonoBehaviour
     [SerializeField] private float _movingForce;
     [SerializeField] private InverseInputEffect _inverseInputEffect;
     [SerializeField] private float _platformCoefficient;
-    [SerializeField] private BallPlacer _placer;
 
     private Ball _ball;
     private PlayerInput _input;
@@ -31,7 +30,6 @@ public class BallMover : MonoBehaviour
 
         _input = new PlayerInput();
         _rigidbody = GetComponent<Rigidbody>();
-        _placer.BallPlaced += OnPlaced;
         if (Application.platform == RuntimePlatform.WindowsEditor)
             _platformCoefficient = 1;
     }
@@ -59,19 +57,12 @@ public class BallMover : MonoBehaviour
     private void OnDestroy()
     {
         _ball.Broke -= OnBroke;
-        if (_placer != null)
-            _placer.BallPlaced -= OnPlaced;
 
         if (_inverseInputEffect != null)
         {
             _inverseInputEffect.Disabled -= OnInverseInputEffectDisabled;
             _inverseInputEffect.Enabled -= OnInverseInputEffectEnabled;
         }
-    }
-
-    private void OnPlaced()
-    {
-        enabled = true;
     }
 
     private void OnBroke()

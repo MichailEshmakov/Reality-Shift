@@ -9,7 +9,6 @@ public class ChooseEffectMenu : MonoBehaviour
     [SerializeField] private List<Transform> _chooseEffectButtonPlaces;
     [SerializeField] private ChooseEffectButton _chooseEffectButtonTemplate;
     [SerializeField] private StartMenu _startMenu;
-    [SerializeField] private BallPlacer _ballPlacer;
     [SerializeField] private TestModeSetter _testModeSetter;
     [SerializeField] private LevelGroupKeeper _levelGroupKeeper;
 
@@ -20,10 +19,17 @@ public class ChooseEffectMenu : MonoBehaviour
         if (_testModeSetter.IsTestMode == false)
         {
             _chooseEffectButtons = new List<ChooseEffectButton>(_chooseEffectButtonPlaces.Count);
-            if (_ballPlacer.IsBallPlaced)
-                OnBallPlaced();
+        }
+    }
 
-            _ballPlacer.BallPlaced += OnBallPlaced;
+    private void Start()
+    {
+        if (_testModeSetter.IsTestMode == false)
+        {
+            if (_effectKeeper.IsSavedEffectsEnabled || _levelGroupKeeper.LevelGroup.GetCurrentLevelIndex() == 0)
+                Activate();
+            else
+                _effectKeeper.SavedEffectsEnabled += Activate;
         }
     }
 
@@ -39,22 +45,6 @@ public class ChooseEffectMenu : MonoBehaviour
 
             _chooseEffectButtons.Clear();
             _startMenu.gameObject.SetActive(true);
-        }
-    }
-
-    private void OnDestroy()
-    {
-        _ballPlacer.BallPlaced -= OnBallPlaced;
-    }
-
-    private void OnBallPlaced()
-    {
-        if (_ballPlacer.IsFirstBallPlacement)
-        {
-            if (_effectKeeper.IsSavedEffectsEnabled || _levelGroupKeeper.LevelGroup.GetCurrentLevelIndex() == 0)
-                Activate();
-            else
-                _effectKeeper.SavedEffectsEnabled += Activate;
         }
     }
 

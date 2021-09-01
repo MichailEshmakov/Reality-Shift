@@ -7,7 +7,6 @@ using UnityEngine.SceneManagement;
 public class CameraMover : MonoBehaviour
 {
     [SerializeField] private Ball _ball;
-    [SerializeField] private BallPlacer _ballPlacer;
     [SerializeField] private Camera _mainCamera;
 
     private Vector3 _startOffset;
@@ -18,7 +17,6 @@ public class CameraMover : MonoBehaviour
     private Quaternion _previousCameraRotation;
     private Quaternion _previousBallRotation;
     private Vector3 _previousBallPosition;
-    private bool _canMove;
     private bool _isStartParametersSet;
 
     public Vector3 StartOffset => _startOffset;
@@ -41,59 +39,27 @@ public class CameraMover : MonoBehaviour
         StartParametersSet?.Invoke();
     }
 
-    private void OnEnable()
-    {
-        SceneManager.sceneUnloaded += OnSceneUnloaded;
-        if (_ballPlacer.IsBallPlaced)
-            OnBallPlaced();
-
-        _ballPlacer.BallPlaced += OnBallPlaced;    
-    }
-
-    private void OnDisable()
-    {
-        SceneManager.sceneUnloaded -= OnSceneUnloaded;
-        _ballPlacer.BallPlaced -= OnBallPlaced;
-    }
-
     private void LateUpdate()
     {
-        if (_canMove)
-        {
-            _mainCamera.transform.position += _resultAdditivePosition;
-            _mainCamera.transform.rotation = _resultAdditiveRotation * _mainCamera.transform.rotation;
-        }
+        _mainCamera.transform.position += _resultAdditivePosition;
+        _mainCamera.transform.rotation = _resultAdditiveRotation * _mainCamera.transform.rotation;
 
         ResetParameters();
     }
 
     public void AddPosition(Vector3 additivePosition)
     {
-        if (_canMove)
-            _resultAdditivePosition += additivePosition;
+        _resultAdditivePosition += additivePosition;
     }
 
     public void AddRotation(Quaternion additiveRotation)
     {
-        if (_canMove)
-            _resultAdditiveRotation = additiveRotation * _resultAdditiveRotation;
+        _resultAdditiveRotation = additiveRotation * _resultAdditiveRotation;
     }
 
     public void SubscribeCameraMovementEffect(CameraMovingEffect effect)
     {
         effect.Disabled += OnCameraMovementEffectDisabled;
-    }
-
-    private void OnBallPlaced()
-    {
-        ResetCameraPosition();
-        ResetParameters();
-        _canMove = true;
-    }
-
-    private void OnSceneUnloaded(Scene arg0)
-    {
-        _canMove = false;
     }
 
     private void OnCameraMovementEffectDisabled(Effect effect)

@@ -1,9 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.Events;
-using System;
 
 [RequireComponent(typeof(Rigidbody))]
 public class Ball : MonoBehaviour
@@ -11,7 +9,6 @@ public class Ball : MonoBehaviour
     [SerializeField] private float _breakingDeathDelay;
     [SerializeField] private BallPart[] _breakingParts;
     [SerializeField] private GameObject _model;
-    [SerializeField] private BallPlacer _placer;
     [SerializeField] private float _breakingForce;
 
     private Rigidbody _rigidbody;
@@ -21,7 +18,6 @@ public class Ball : MonoBehaviour
 
     private void Awake()
     {
-        _placer.BallPlaced += OnPlaced;
         _rigidbody = GetComponent<Rigidbody>();
     }
 
@@ -37,12 +33,6 @@ public class Ball : MonoBehaviour
     {
         if (other.gameObject.TryGetComponent(out LevelBorder levelBorder))
             Die();
-    }
-
-    private void OnPlaced()
-    {
-        _model.SetActive(true);
-        _rigidbody.useGravity = true;
     }
 
     private void Break()
@@ -70,7 +60,6 @@ public class Ball : MonoBehaviour
     private void Die()
     {
         Died?.Invoke();
-        ResetVelocity();
     }
 
     private void ResetVelocity()
