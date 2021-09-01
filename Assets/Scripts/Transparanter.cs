@@ -52,7 +52,8 @@ public class Transparanter : MonoBehaviour
         {
             Material newMaterial = new Material(_transparentMaterial)
             {
-                color = new Color(renderer.material.color.r, renderer.material.color.g, renderer.material.color.b, _transparentMaterial.color.a)
+                color = new Color(renderer.material.color.r, renderer.material.color.g, renderer.material.color.b, _transparentMaterial.color.a),
+                mainTexture = renderer.material.mainTexture
             };
             
             _transparentedObjects.Add(other.gameObject, renderer.material);
@@ -73,8 +74,9 @@ public class Transparanter : MonoBehaviour
     private bool CheckTransparantable(GameObject checkingObject, out MeshRenderer renderer)
     {
         renderer = null;
-        return checkingObject.TryGetComponent(out Ball ball) == false
+        return checkingObject.GetComponentInParent<Ball>() == null
             && checkingObject.TryGetComponent(out Question question) == false
+            && checkingObject.TryGetComponent(out BallPart ballPart) == false
             && checkingObject.TryGetComponent(out renderer);
     }
 
