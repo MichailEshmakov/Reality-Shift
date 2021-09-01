@@ -8,67 +8,21 @@ using System;
 [RequireComponent(typeof(Rigidbody))]
 public class Ball : MonoBehaviour
 {
-    //TODO: Разделить управление и смерть
-    [SerializeField] private float _movingForce;
-    [SerializeField] private InverseInputEffect _inverseInputEffect;
-    [SerializeField] private float _platformCoefficient;
     [SerializeField] private float _breakingDeathDelay;
     [SerializeField] private BallPart[] _breakingParts;
     [SerializeField] private GameObject _model;
     [SerializeField] private BallPlacer _placer;
     [SerializeField] private float _breakingForce;
 
-    private PlayerInput _input;
     private Rigidbody _rigidbody;
-    private int _inversingCoefficient = 1;
 
     public event UnityAction Died;
+    public event UnityAction Broke;
 
     private void Awake()
     {
-        if (_inverseInputEffect != null)
-        {
-            _inverseInputEffect.Disabled += OnInverseInputEffectDisabled;
-            _inverseInputEffect.Enabled += OnInverseInputEffectEnabled;
-            if (_inverseInputEffect.enabled)
-                _inversingCoefficient = -1;
-        }
-
-        _input = new PlayerInput();
-        _rigidbody = GetComponent<Rigidbody>();
-        if (Application.platform == RuntimePlatform.WindowsEditor)
-            _platformCoefficient = 1;
-
         _placer.BallPlaced += OnPlaced;
-    }
-
-    private void OnEnable()
-    {
-        _input.Enable();
-    }
-
-    private void OnDisable()
-    {
-        if (_input != null)
-            _input.Disable();
-    }
-
-    private void FixedUpdate()
-    {
-        if (Application.platform != RuntimePlatform.WindowsEditor || _input.Player.AllowMove.phase == UnityEngine.InputSystem.InputActionPhase.Started)
-        {
-            Vector2 movingInput = _input.Player.Move.ReadValue<Vector2>() * _inversingCoefficient;
-            _rigidbody.AddForce(new Vector3(movingInput.x, 0, movingInput.y) * _movingForce * _platformCoefficient * Time.deltaTime);
-        }
-    }
-
-    private void OnDestroy()
-    {
-        if (_inverseInputEffect != null)
-        {
-            _inverseInputEffect.Disabled -= OnInverseInputEffectDisabled;
-            _inverseInputEffect.Enabled -= OnInverseInputEffectEnabled;
-        }
+        _rigidbody = GetComponent<Rigidbody>();
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -89,15 +43,12 @@ public class Ball : MonoBehaviour
     {
         _model.SetActive(true);
         _rigidbody.useGravity = true;
-        if (gameObject.activeSelf)
-            _input.Enable();
     }
 
     private void Break()
     {
         _model.SetActive(false);
         _rigidbody.useGravity = false;
-        _input.Disable();
         ResetVelocity();
         foreach (BallPart part in _breakingParts)
         {
@@ -106,6 +57,7 @@ public class Ball : MonoBehaviour
             Destroy(newPart.gameObject, _breakingDeathDelay);//TODO:Переделать в пул
         }
 
+        Broke?.Invoke();
         StartCoroutine(DieWithDalay());
     }
 
@@ -125,15 +77,5 @@ public class Ball : MonoBehaviour
     {
         _rigidbody.velocity = Vector3.zero;
         _rigidbody.angularVelocity = Vector3.zero;
-    }
-
-    private void OnInverseInputEffectDisabled(Effect effect)
-    {
-        _inversingCoefficient = 1;
-    }
-
-    private void OnInverseInputEffectEnabled(Effect effect)
-    {
-        _inversingCoefficient = -1;
     }
 }

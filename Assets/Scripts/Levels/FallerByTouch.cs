@@ -22,7 +22,7 @@ public class FallerByTouch : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.TryGetComponent(out Ball ball))
+        if (other.gameObject.GetComponentInParent<Ball>() != null)
         {
             foreach (KinematicChanger kinematicChanger in _kinematicChangers)
             {
