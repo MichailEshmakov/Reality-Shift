@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.SceneManagement;
 
 public class Finish : MonoBehaviour
 {
@@ -15,7 +14,7 @@ public class Finish : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.TryGetComponent(out Ball ball))
+        if (other.gameObject.GetComponentInParent<Ball>() != null)
         {
             _isBallInside = true;
             StartCoroutine(WaitFinish());
@@ -24,7 +23,7 @@ public class Finish : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.TryGetComponent(out Ball ball))
+        if (other.gameObject.GetComponentInParent<Ball>() != null)
         {
             _isBallInside = false;
         }
