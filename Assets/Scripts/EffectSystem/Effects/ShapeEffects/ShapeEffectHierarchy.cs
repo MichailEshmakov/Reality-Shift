@@ -2,30 +2,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class ShapeEffectHierarchy : MonoBehaviour
 {
     [SerializeField] private List<ShapeEffect> _shapeEffects;
-    [SerializeField] private Mesh _defaultMesh;
-    [SerializeField] private Ball _ball;
+    [SerializeField] private BallShape _defaultShape;
+    [SerializeField] private Transform _ball;
+    [SerializeField] private GameObject _currentModel;
 
-    private MeshCollider _ballsCollider;
-    private MeshFilter _ballsMeshFilter;
     private ShapeEffect _currentEffect;
 
-    private void Awake()
-    {
-        _ballsCollider = _ball.GetComponent<MeshCollider>();
-        _ballsMeshFilter = _ball.GetComponent<MeshFilter>();
-    }
-
-    public void AddEffect(ShapeEffect shapeEffect)
-    {
-        _shapeEffects.Add(shapeEffect);
-        ApplyShape(shapeEffect.Mesh);
-        _currentEffect = shapeEffect;
-        shapeEffect.Disabled += RemoveEffect;
-    }
+    public event UnityAction<GameObject> ShapeChanged;
 
     private void RemoveEffect(Effect effect)
     {
@@ -37,12 +25,12 @@ public class ShapeEffectHierarchy : MonoBehaviour
                 if (_shapeEffects.Count > 0)
                 {
                     _currentEffect = _shapeEffects[_shapeEffects.Count - 1];
-                    ApplyShape(_currentEffect.Mesh);
+                    ApplyShape(_currentEffect.Shape.Template);
                 }
                 else
                 {
                     _currentEffect = null;
-                    ApplyShape(_defaultMesh);
+                    ApplyShape(_defaultShape.Template);
                 }
             }
 
@@ -50,11 +38,26 @@ public class ShapeEffectHierarchy : MonoBehaviour
         }
     }
 
-    private void ApplyShape(Mesh mesh)
+    private void ApplyShape(GameObject shape)
     {
-        if (_ballsCollider != null)
-            _ballsCollider.sharedMesh = mesh;
-        if (_ballsMeshFilter != null)
-            _ballsMeshFilter.mesh = mesh;
+        Destroy(_currentModel);
+        _currentModel = Instantiate(shape, _ball);
+        ShapeChanged?.Invoke(_currentModel);
+    }
+
+    public void AddEffect(ShapeEffect shapeEffect)
+    {
+        _shapeEffects.Add(shapeEffect);
+        ApplyShape(shapeEffect.Shape.Template);
+        _currentEffect = shapeEffect;
+        shapeEffect.Disabled += RemoveEffect;
+    }
+
+    public BallPart[] GetPartsTemplates()
+    {
+        if (_currentEffect != null)
+            return _currentEffect.Shape.PartsTemplates;
+        else
+            return _defaultShape.PartsTemplates;
     }
 }

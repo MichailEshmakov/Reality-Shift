@@ -26,7 +26,7 @@ public class Question : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.TryGetComponent(out Ball ball))
+        if (other.GetComponentInParent<Ball>() != null)
         {
             _questionScore.AddQuestion();
             gameObject.SetActive(false);
