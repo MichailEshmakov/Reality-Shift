@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class ShapeEffect : Effect
 {
-    [SerializeField] private Mesh _mesh;
+    [SerializeField] private BallShape _shape;
     [SerializeField] private ShapeEffectHierarchy _hierarchy;
 
-    public Mesh Mesh => _mesh;
+    public BallShape Shape => _shape;
 
     protected override void OnEnable()
     {

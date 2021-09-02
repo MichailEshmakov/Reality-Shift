@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,8 +8,8 @@ using UnityEngine.Events;
 public class Ball : MonoBehaviour
 {
     [SerializeField] private float _breakingDeathDelay;
-    [SerializeField] private BallPart[] _breakingParts;
     [SerializeField] private GameObject _model;
+    [SerializeField] private ShapeEffectHierarchy _shapeHierarchy;
     [SerializeField] private float _breakingForce;
 
     private Rigidbody _rigidbody;
@@ -19,6 +20,7 @@ public class Ball : MonoBehaviour
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody>();
+        _shapeHierarchy.ShapeChanged += OnShapeChanged;
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -35,16 +37,22 @@ public class Ball : MonoBehaviour
             Die();
     }
 
+    private void OnShapeChanged(GameObject newModel)
+    {
+        _model = newModel;
+    }
+
     private void Break()
     {
         _model.SetActive(false);
         _rigidbody.useGravity = false;
         ResetVelocity();
-        foreach (BallPart part in _breakingParts)
+        BallPart[] breakingParts = _shapeHierarchy.GetPartsTemplates();
+        foreach (BallPart part in breakingParts)
         {
             BallPart newPart = Instantiate(part, transform);
             newPart.TakeForce(_breakingForce);
-            Destroy(newPart.gameObject, _breakingDeathDelay);//TODO:Переделать в пул
+            Destroy(newPart.gameObject, _breakingDeathDelay);
         }
 
         Broke?.Invoke();
