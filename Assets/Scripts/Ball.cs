@@ -13,6 +13,7 @@ public class Ball : MonoBehaviour
     [SerializeField] private float _breakingForce;
 
     private Rigidbody _rigidbody;
+    private FireCarrier _fireCarrier;
 
     public event UnityAction Died;
     public event UnityAction Broke;
@@ -20,6 +21,7 @@ public class Ball : MonoBehaviour
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody>();
+        _fireCarrier = GetComponent<FireCarrier>();
         _shapeHierarchy.ShapeChanged += OnShapeChanged;
     }
 
@@ -27,7 +29,8 @@ public class Ball : MonoBehaviour
     {
         if (collision.gameObject.TryGetComponent(out BallBreaker ballBreaker))
         {
-            Break();
+            if (_fireCarrier == null || _fireCarrier.IsBurning == false)
+                Break();
         }
     }
 
