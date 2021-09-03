@@ -22,8 +22,8 @@ public class FireCarrier : MonoBehaviour
     {
         if (_currentFire == null)
         {
-            _currentFire = Instantiate(_fireTemlate);
-            _currentFire.Init(this);
+            _currentFire = Instantiate(_fireTemlate, transform.position, transform.rotation);
+            _currentFire.Init(transform);
         }
         else
             _currentFire.gameObject.SetActive(true);
