@@ -3,16 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
-public class PhysicalTouchAdopter : TouchAdopter
+public class PhysicalTouchAdopter : MonoBehaviour
 {
     private List<Rigidbody> _adoptedRigidbodies;
     private Vector3 _previousPosition;
-    private Rigidbody _rigidbody;
 
     private void Awake()
     {
         _adoptedRigidbodies = new List<Rigidbody>();
-        _rigidbody = GetComponent<Rigidbody>();
     }
 
     private void Start()
@@ -32,13 +30,10 @@ public class PhysicalTouchAdopter : TouchAdopter
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (IsAdoptable(collision.transform))
+        if (collision.gameObject.TryGetComponent(out Adoptable adoptable) && collision.gameObject.TryGetComponent(out Rigidbody rigidbody))
         {
-            if (collision.gameObject.TryGetComponent(out Rigidbody rigidbody))
-            {
-                if (_adoptedRigidbodies.Contains(rigidbody) == false)
-                    _adoptedRigidbodies.Add(rigidbody);
-            }
+            if (_adoptedRigidbodies.Contains(rigidbody) == false)
+                _adoptedRigidbodies.Add(rigidbody);
         }
     }
 
@@ -46,8 +41,7 @@ public class PhysicalTouchAdopter : TouchAdopter
     {
         if (collision.gameObject.TryGetComponent(out Rigidbody rigidbody))
         {
-            if (_adoptedRigidbodies.Contains(rigidbody))
-                _adoptedRigidbodies.Remove(rigidbody);
+            _adoptedRigidbodies.Remove(rigidbody);
         }
     }
 }
