@@ -32,8 +32,8 @@ public class Transparanter : MonoBehaviour
     private void FixedUpdate()
     {
         Vector3 fromCameratoBall = _ball.transform.position - _mainCamera.transform.position;
-        transform.rotation = Quaternion.LookRotation(fromCameratoBall);
-        if (_isAnyoOffsetChangingEffectEnable)
+        transform.rotation = Quaternion.LookRotation(fromCameratoBall);//TODO: Сделать проверку на наличие вращающих эффектов
+        if (_isAnyoOffsetChangingEffectEnable)//TODO:Заменить на корутину
             SetColliderSize(fromCameratoBall);
     }
 
@@ -83,6 +83,7 @@ public class Transparanter : MonoBehaviour
     private void OnOffsetChangingEffectDisabled(Effect arg0)
     {
         SetOffsetChangingEffectEnablingFlag();
+        SetColliderSize(_ball.transform.position - _mainCamera.transform.position);
     }
 
     private void OnOffsetChangingEffectEnabled(Effect arg0)

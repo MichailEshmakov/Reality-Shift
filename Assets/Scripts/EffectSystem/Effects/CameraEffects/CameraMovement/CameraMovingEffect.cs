@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,8 +12,8 @@ public abstract class CameraMovingEffect : Effect
     protected override void OnEnable()
     {
         base.OnEnable();
-        _cameraMover.SubscribeCameraMovementEffect(this);
-        _cameraMover.CameraMovementEffectDisabled += OnCameraMovementEffectDisabled;
+        _cameraMover.AdderDisabled += OnCameraMovingAdderDisabled;
+        _cameraMover.AdderEnabled += OnCameraMovingAdderEnabled;
 
         ResetParameters();
     }
@@ -21,14 +22,21 @@ public abstract class CameraMovingEffect : Effect
     {
         base.OnDisable();
         if (_cameraMover != null)
-            _cameraMover.CameraMovementEffectDisabled -= OnCameraMovementEffectDisabled;
+        {
+            _cameraMover.AdderDisabled -= OnCameraMovingAdderDisabled;
+            _cameraMover.AdderEnabled += OnCameraMovingAdderEnabled;
+        }
     }
 
-    private void OnCameraMovementEffectDisabled()
+    private void OnCameraMovingAdderDisabled()
+    {
+        ResetParameters();
+    }
+
+    private void OnCameraMovingAdderEnabled()
     {
         ResetParameters();
     }
 
     protected virtual void ResetParameters() { }
-
 }
