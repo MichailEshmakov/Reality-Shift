@@ -13,7 +13,7 @@ public class Transparanter : MonoBehaviour
 
     private CapsuleCollider _collider;
     private Dictionary<GameObject, Material> _transparentedObjects;
-    private List<CameraMovingEffect> _enabledMovingEffects;
+    private List<CameraTransformingEffect> _enabledMovingEffects;
 
     private void Awake()
     {
@@ -54,9 +54,9 @@ public class Transparanter : MonoBehaviour
 
     private void InitCameraMovingEffectsList()
     {
-        List<CameraMovingEffect> cameraMovingEffects = _effectKeeper.GetTypedEffects<CameraMovingEffect>();
-        _enabledMovingEffects = new List<CameraMovingEffect>();
-        foreach (CameraMovingEffect effect in cameraMovingEffects)
+        List<CameraTransformingEffect> cameraMovingEffects = _effectKeeper.GetTypedEffects<CameraTransformingEffect>();
+        _enabledMovingEffects = new List<CameraTransformingEffect>();
+        foreach (CameraTransformingEffect effect in cameraMovingEffects)
         {
             if (effect.enabled)
                 _enabledMovingEffects.Add(effect);
@@ -68,18 +68,19 @@ public class Transparanter : MonoBehaviour
 
     private IEnumerator UpdateMoving()
     {
-        while (_enabledMovingEffects.Count > 0)
+        do
         {
             yield return new WaitForFixedUpdate();
             Vector3 fromCameratoBal = _ball.transform.position - _mainCamera.transform.position;
             transform.rotation = Quaternion.LookRotation(fromCameratoBal);
             SetColliderSize(fromCameratoBal);
         }
+        while (_enabledMovingEffects.Count > 0);
     }
 
     private void OnCameraMovingEffectEnabled(Effect effect)
     {
-        if (effect is CameraMovingEffect movingEffect && _enabledMovingEffects.Contains(movingEffect) == false)
+        if (effect is CameraTransformingEffect movingEffect && _enabledMovingEffects.Contains(movingEffect) == false)
         {
             _enabledMovingEffects.Add(movingEffect);
             if (_enabledMovingEffects.Count == 1)
@@ -89,7 +90,7 @@ public class Transparanter : MonoBehaviour
 
     private void OnCameraMovingEffectDisabled(Effect effect)
     {
-        if (effect is CameraMovingEffect movingEffect)
+        if (effect is CameraTransformingEffect movingEffect)
             _enabledMovingEffects.Remove(movingEffect);
     }
 

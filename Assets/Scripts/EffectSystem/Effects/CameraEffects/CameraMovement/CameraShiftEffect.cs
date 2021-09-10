@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class CameraShiftEffect : CameraMovingEffect, ICameraMovingAdder
+public class CameraShiftEffect : CameraTransformingEffect, ICameraMovingAdder
 {
     [SerializeField] private float _maxShift;
     [SerializeField] private float _speed;

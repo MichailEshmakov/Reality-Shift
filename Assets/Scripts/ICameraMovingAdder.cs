@@ -1,4 +1,4 @@
-public interface ICameraMovingAdder
+public interface ICameraMovingAdder : ICameraAdder
 {
     
 }

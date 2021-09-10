@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraDrillEffect : CameraMovingEffect, ICameraRotatingAdder
+public class CameraDrillEffect : CameraTransformingEffect, ICameraRotatingAdder
 {
     [SerializeField] private float _maxAngle;
     [SerializeField] private float _rotationSpeed;
@@ -14,7 +14,7 @@ public class CameraDrillEffect : CameraMovingEffect, ICameraRotatingAdder
     private void LateUpdate()
     {
         _currentAngle += _rotationSpeed * Time.deltaTime * _directionCoefficient;
-        CameraMover.AddRotation(Quaternion.AngleAxis(_rotationSpeed * Time.deltaTime * _directionCoefficient, _camera.forward), this);
+        CameraRotator.AddRotation(Quaternion.AngleAxis(_rotationSpeed * Time.deltaTime * _directionCoefficient, _camera.forward), this);
 
         if (_directionCoefficient >= 0 && _currentAngle >= _maxAngle)
         {
