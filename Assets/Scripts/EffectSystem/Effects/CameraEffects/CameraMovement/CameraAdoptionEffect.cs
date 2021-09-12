@@ -2,22 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraAdoptionEffect : CameraMovingEffect
+public class CameraAdoptionEffect : CameraTransformingEffect, ICameraRotatingAdder, ICameraMovingAdder
 {
-    [SerializeField] private Transform _ball;
+    [SerializeField] private BallTransformObserver _ballTransformObserver;
 
-    private Quaternion _onEnableBallRotation;
+    private Quaternion _resetedBallRotation;
 
-    private void Update()
+    private void LateUpdate()
     {
-        CameraMover.AddPosition((_ball.rotation * Quaternion.Inverse(_onEnableBallRotation) * CameraMover.StartOffset) 
-            - (CameraMover.PreviousBallRotation * Quaternion.Inverse(_onEnableBallRotation) * CameraMover.StartOffset));
-        CameraMover.AddRotation(_ball.rotation * Quaternion.Inverse(CameraMover.PreviousBallRotation));
+        CameraMover.AddPosition((_ballTransformObserver.BallRotation * Quaternion.Inverse(_resetedBallRotation) * CameraMover.StartOffset) 
+            - (_ballTransformObserver.PreviousBallRotation * Quaternion.Inverse(_resetedBallRotation) * CameraMover.StartOffset), this);
+        CameraRotator.AddRotation(_ballTransformObserver.BallRotation * Quaternion.Inverse(_ballTransformObserver.PreviousBallRotation), this);
     }
 
-    protected override void OnEnable()
+    protected override void ResetParameters()
     {
-        base.OnEnable();
-        _onEnableBallRotation = _ball.rotation;
+        _resetedBallRotation = _ballTransformObserver.BallRotation;
     }
 }

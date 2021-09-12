@@ -1,4 +1,3 @@
-using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,41 +8,23 @@ public class Transparanter : MonoBehaviour
 {
     [SerializeField] private Ball _ball;
     [SerializeField] private Camera _mainCamera;
-    [SerializeField] private List<Effect> _offsetChangingEffects;
     [SerializeField] private Material _transparentMaterial;
+    [SerializeField] private EffectKeeper _effectKeeper;
 
     private CapsuleCollider _collider;
-    private bool _isAnyoOffsetChangingEffectEnable;
     private Dictionary<GameObject, Material> _transparentedObjects;
+    private List<CameraTransformingEffect> _enabledMovingEffects;
 
-    private void Start()
+    private void Awake()
     {
         _collider = GetComponent<CapsuleCollider>();
         _transparentedObjects = new Dictionary<GameObject, Material>();
-        SetColliderSize(_ball.transform.position - _mainCamera.transform.position);
-
-        foreach (Effect effect in _offsetChangingEffects)
-        {
-            effect.Enabled += OnOffsetChangingEffectEnabled;
-            effect.Disabled += OnOffsetChangingEffectDisabled;
-        }
     }
 
-    private void FixedUpdate()
+    private void Start()
     {
-        Vector3 fromCameratoBall = _ball.transform.position - _mainCamera.transform.position;
-        transform.rotation = Quaternion.LookRotation(fromCameratoBall);
-        if (_isAnyoOffsetChangingEffectEnable)
-            SetColliderSize(fromCameratoBall);
-    }
-
-    private void OnDestroy()
-    {
-        foreach (Effect effect in _offsetChangingEffects)
-        {
-            effect.Enabled -= OnOffsetChangingEffectEnabled;
-            effect.Disabled -= OnOffsetChangingEffectDisabled;
-        }
+        InitCameraMovingEffectsList();
+        StartCoroutine(UpdateMoving());
     }
 
     private void OnTriggerEnter(Collider other)
@@ -71,6 +52,55 @@ public class Transparanter : MonoBehaviour
         }
     }
 
+    private void InitCameraMovingEffectsList()
+    {
+        List<CameraTransformingEffect> cameraMovingEffects = _effectKeeper.GetTypedEffects<CameraTransformingEffect>();
+        _enabledMovingEffects = new List<CameraTransformingEffect>();
+        foreach (CameraTransformingEffect effect in cameraMovingEffects)
+        {
+            if (effect.enabled)
+                _enabledMovingEffects.Add(effect);
+            effect.Enabled += OnCameraMovingEffectEnabled;
+            effect.Disabled += OnCameraMovingEffectDisabled;
+            effect.Destroyed += OnCameraMovingEffectDestroyed;
+        }
+    }
+
+    private IEnumerator UpdateMoving()
+    {
+        do
+        {
+            yield return new WaitForFixedUpdate();
+            Vector3 fromCameratoBal = _ball.transform.position - _mainCamera.transform.position;
+            transform.rotation = Quaternion.LookRotation(fromCameratoBal);
+            SetColliderSize(fromCameratoBal);
+        }
+        while (_enabledMovingEffects.Count > 0);
+    }
+
+    private void OnCameraMovingEffectEnabled(Effect effect)
+    {
+        if (effect is CameraTransformingEffect movingEffect && _enabledMovingEffects.Contains(movingEffect) == false)
+        {
+            _enabledMovingEffects.Add(movingEffect);
+            if (_enabledMovingEffects.Count == 1)
+                StartCoroutine(UpdateMoving());
+        }
+    }
+
+    private void OnCameraMovingEffectDisabled(Effect effect)
+    {
+        if (effect is CameraTransformingEffect movingEffect)
+            _enabledMovingEffects.Remove(movingEffect);
+    }
+
+    private void OnCameraMovingEffectDestroyed(Effect effect)
+    {
+        effect.Enabled -= OnCameraMovingEffectEnabled;
+        effect.Disabled -= OnCameraMovingEffectDisabled;
+        effect.Destroyed -= OnCameraMovingEffectDestroyed;
+    }
+
     private bool CheckTransparantable(GameObject checkingObject, out MeshRenderer renderer)
     {
         renderer = null;
@@ -80,23 +110,9 @@ public class Transparanter : MonoBehaviour
             && checkingObject.TryGetComponent(out renderer);
     }
 
-    private void OnOffsetChangingEffectDisabled(Effect arg0)
+    private void SetColliderSize(Vector3 fromCameratoBal)
     {
-        SetOffsetChangingEffectEnablingFlag();
-    }
-
-    private void OnOffsetChangingEffectEnabled(Effect arg0)
-    {
-        SetOffsetChangingEffectEnablingFlag();
-    }
-
-    private void SetOffsetChangingEffectEnablingFlag()
-    {
-        _isAnyoOffsetChangingEffectEnable = _offsetChangingEffects.Any(effect => effect.enabled);
-    }
-
-    private void SetColliderSize(Vector3 fromCameratoBall)
-    {
+        Vector3 fromCameratoBall = _ball.transform.position - _mainCamera.transform.position;
         _collider.height = fromCameratoBall.magnitude;
         _collider.center = new Vector3(_collider.center.x, _collider.center.y, _collider.height / 2);
     }

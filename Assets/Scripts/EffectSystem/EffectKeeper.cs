@@ -94,4 +94,17 @@ public class EffectKeeper : MonoBehaviour
 
         return enabledEffectsIndexes;
     }
+
+    public List<T> GetTypedEffects<T>()
+    {
+        List<T> typedEffects = new List<T>();
+
+        foreach(Effect effect in _effects)
+        {
+            if (effect is T typedEffect)
+                typedEffects.Add(typedEffect);
+        }
+
+        return typedEffects;
+    }
 }

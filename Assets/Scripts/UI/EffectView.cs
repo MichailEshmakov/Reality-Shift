@@ -74,7 +74,7 @@ public class EffectView : MonoBehaviour
         }
     }
 
-    private void OnEffectDestroyed()
+    private void OnEffectDestroyed(Effect effect)
     {
         if (this != null)
         {
