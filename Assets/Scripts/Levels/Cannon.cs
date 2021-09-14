@@ -17,13 +17,19 @@ public class Cannon : ObjectPool
 
     private Transform _target;
     private float _lastShootingTime;
-    private Vector3 _shootingDirection;
+    private Vector3 _startShootingDirection;
+    private Quaternion _startRotation;
 
     private void Awake()
     {
         Initialize(_bulletTemplate.gameObject);
+    }
+
+    private void Start()
+    {
         _lastShootingTime = Time.time;
-        _shootingDirection = (_muzzleDirectionPoint.position - _bulletSpawnPoint.position).normalized;
+        _startShootingDirection = (_muzzleDirectionPoint.position - _bulletSpawnPoint.position).normalized;
+        _startRotation = transform.rotation;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -83,8 +89,8 @@ public class Cannon : ObjectPool
             bullet.gameObject.SetActive(true);
             bullet.Rigidbody.velocity = Vector3.zero;
             bullet.Rigidbody.angularVelocity = Vector3.zero;
-            bullet.Rigidbody.AddForce(transform.rotation * _shootingDirection * _shootingImpulse, ForceMode.Impulse);
-            bullet.Rigidbody.AddForce(transform.rotation * _shootingDirection * _shootingImpulse, ForceMode.Impulse);
+            Vector3 shootingDirection = (transform.rotation * Quaternion.Inverse(_startRotation)) * _startShootingDirection;
+            bullet.Rigidbody.AddForce(shootingDirection * _shootingImpulse, ForceMode.Impulse);
             _lastShootingTime = Time.time;
         }
     }
