@@ -13,13 +13,13 @@ public class Gate : MonoBehaviour
 
     private void Awake()
     {
-        _keyFallDetector.KeyKeyFallen += OnKeyFallen;
+        _keyFallDetector.KeyFallen += OnKeyFallen;
         _startPositonY = transform.position.y;
     }
 
     private void OnDestroy()
     {
-        _keyFallDetector.KeyKeyFallen -= OnKeyFallen;
+        _keyFallDetector.KeyFallen -= OnKeyFallen;
     }
 
     private void OnKeyFallen()

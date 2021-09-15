@@ -5,11 +5,11 @@ using UnityEngine.Events;
 
 public class KeyFallDetector : MonoBehaviour
 {
-    public event UnityAction KeyKeyFallen;
+    public event UnityAction KeyFallen;
 
     private void OnTriggerExit(Collider other)
     {
         if (other.gameObject.TryGetComponent(out Key key))
-            KeyKeyFallen?.Invoke();
+            KeyFallen?.Invoke();
     }
 }
