@@ -6,7 +6,6 @@ using UnityEngine.Events;
 public class SaveSystem : MonoBehaviour
 {
     public event UnityAction ProgressSaved;
-    public event UnityAction ProgressDownloaded;
 
     protected void SaveProgress(LevelGroupProgress progress, string levelGroupName)
     {
@@ -24,7 +23,6 @@ public class SaveSystem : MonoBehaviour
     {
         string jsonProgressData = PlayerPrefs.GetString(levelGroupName);
         LevelGroupProgress levelGroupProgress = JsonUtility.FromJson<LevelGroupProgress>(jsonProgressData);
-        ProgressDownloaded?.Invoke();
         return levelGroupProgress;
     }
 }

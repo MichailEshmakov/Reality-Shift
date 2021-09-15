@@ -13,6 +13,7 @@ public class LevelSaveSystem : SaveSystem
     private LevelGroupProgress _currentLevelGroupProgress;
     private bool _isProgressDownloaded = false;
 
+    public event UnityAction ProgressDownloaded;
     public bool IsProgressDownloaded => _isProgressDownloaded;
     public LevelGroupProgress CurrentLevelGroupProgress => _currentLevelGroupProgress;
 
@@ -23,6 +24,7 @@ public class LevelSaveSystem : SaveSystem
         {
             _currentLevelGroupProgress = DownloadProgress(_levelGroupKeeper.LevelGroup.name);
             _isProgressDownloaded = true;
+            ProgressDownloaded?.Invoke();
         }
     }
 
