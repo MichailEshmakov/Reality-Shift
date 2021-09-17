@@ -11,6 +11,7 @@ public class CameraRotator : CameraTransformer<ICameraRotatingAdder>
     {
         _startRotation = MainCamera.transform.rotation;
         ResetFrameParameters();
+        InvokeStartParametersSet();
     }
 
     private void TryApplyAdditiveRotation()
