@@ -11,6 +11,8 @@ public abstract class CameraTransformer<Adder> : MonoBehaviour where Adder : ICa
     [SerializeField] private TestModeSetter _testModeSetter;
 
     private Dictionary<Adder, bool> _enabledAddersUpdated;
+    private event UnityAction _startParametersSet;
+    private bool _isStartParametersSet;
 
     protected Camera MainCamera => _mainCamera;
 
@@ -67,8 +69,10 @@ public abstract class CameraTransformer<Adder> : MonoBehaviour where Adder : ICa
         if (effect is Adder adder && _enabledAddersUpdated.ContainsKey(adder) == false)
             _enabledAddersUpdated.Add(adder, false);
 
-        ResetTransform();
-        ResetFrameParameters();
+        if (_isStartParametersSet)
+            ResetParameters();
+        else
+            _startParametersSet += ResetParameters;
     }
 
     private void OnAdderDisabled(Effect effect)
@@ -77,8 +81,7 @@ public abstract class CameraTransformer<Adder> : MonoBehaviour where Adder : ICa
         if (effect is Adder adder)
             _enabledAddersUpdated.Remove(adder);
 
-        ResetTransform();
-        ResetFrameParameters();
+        ResetParameters();
     }
 
     private void OnAdderDestroyed(Effect adder)
@@ -86,6 +89,12 @@ public abstract class CameraTransformer<Adder> : MonoBehaviour where Adder : ICa
         adder.Enabled -= OnAdderEnabled;
         adder.Disabled -= OnAdderDisabled;
         adder.Destroyed -= OnAdderDestroyed;
+    }
+
+    private void ResetParameters()
+    {
+        ResetTransform();
+        ResetFrameParameters();
     }
 
     protected virtual void ResetFrameParameters()
@@ -99,6 +108,11 @@ public abstract class CameraTransformer<Adder> : MonoBehaviour where Adder : ICa
     }
 
     protected abstract void ResetTransform();
+
+    protected void InvokeStartParametersSet()
+    {
+        _startParametersSet?.Invoke();
+    }
 
     protected bool IsAllAddersUpdated()
     {

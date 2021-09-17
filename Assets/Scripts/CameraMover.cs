@@ -23,6 +23,7 @@ public class CameraMover : CameraTransformer<ICameraMovingAdder>
     {
         _startOffset = MainCamera.transform.position - _ballTransformObserver.BallPosition;
         ResetFrameParameters();
+        InvokeStartParametersSet();
     }
 
     private void ResetCameraPosition()
