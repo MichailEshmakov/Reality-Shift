@@ -8,12 +8,11 @@ public class ShapeEffectHierarchy : MonoBehaviour
 {
     [SerializeField] private List<ShapeEffect> _shapeEffects;
     [SerializeField] private BallShape _defaultShape;
-    [SerializeField] private Transform _ball;
-    [SerializeField] private GameObject _currentModel;
+    [SerializeField] private Ball _ball;
 
     private ShapeEffect _currentEffect;
 
-    public event UnityAction<GameObject> ShapeChanged;
+    public event UnityAction<GameObject> NewShapeApplied;
 
     private void RemoveEffect(Effect effect)
     {
@@ -40,9 +39,8 @@ public class ShapeEffectHierarchy : MonoBehaviour
 
     private void ApplyShape(GameObject shape)
     {
-        Destroy(_currentModel);
-        _currentModel = Instantiate(shape, _ball);
-        ShapeChanged?.Invoke(_currentModel);
+        GameObject newModel = Instantiate(shape, _ball.transform);
+        NewShapeApplied?.Invoke(newModel);
     }
 
     public void AddEffect(ShapeEffect shapeEffect)

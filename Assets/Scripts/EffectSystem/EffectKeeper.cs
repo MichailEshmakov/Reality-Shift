@@ -54,6 +54,7 @@ public class EffectKeeper : MonoBehaviour
             _effects[effectIndex].enabled = true;
         }
 
+        _isSavedEffectsEnabled = true;
         SavedEffectsEnabled?.Invoke();
     }
 
