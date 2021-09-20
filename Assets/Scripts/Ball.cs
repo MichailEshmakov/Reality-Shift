@@ -15,14 +15,17 @@ public class Ball : MonoBehaviour
     private Rigidbody _rigidbody;
     private FireCarrier _fireCarrier;
 
+    public GameObject Model => _model;
+
     public event UnityAction Died;
     public event UnityAction Broke;
+    public event UnityAction ShapeChanged;
 
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody>();
         _fireCarrier = GetComponent<FireCarrier>();
-        _shapeHierarchy.ShapeChanged += OnShapeChanged;
+        _shapeHierarchy.NewShapeApplied += OnNewShapeApplied;
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -40,9 +43,11 @@ public class Ball : MonoBehaviour
             Die();
     }
 
-    private void OnShapeChanged(GameObject newModel)
+    private void OnNewShapeApplied(GameObject newModel)
     {
+        Destroy(_model);
         _model = newModel;
+        ShapeChanged.Invoke();
     }
 
     private void Break()
