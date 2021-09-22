@@ -26,7 +26,7 @@ public class PushPointEffect : Effect
 
     protected override void OnDisable()
     {
-        Destroy(_pushPoint);
+        Destroy(_pushPoint.gameObject);
         _ball.ShapeChanged -= OnShapeChanged;
         base.OnDisable();
     }
