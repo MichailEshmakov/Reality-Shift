@@ -13,9 +13,10 @@ public class LevelSaveSystem : SaveSystem
     private LevelGroupProgress _currentLevelGroupProgress;
     private bool _isProgressDownloaded = false;
 
-    public event UnityAction ProgressDownloaded;
     public bool IsProgressDownloaded => _isProgressDownloaded;
     public LevelGroupProgress CurrentLevelGroupProgress => _currentLevelGroupProgress;
+
+    public event UnityAction ProgressDownloaded;
 
     private void Start()
     {
@@ -32,7 +33,7 @@ public class LevelSaveSystem : SaveSystem
     {
         _questionScore.LevelQuestionsRecorded -= OnLevelQuestionsRecorded;
     }
-
+    
     private void OnLevelQuestionsRecorded(int questions)
     {
         int nextSceneIndex = _levelGroupKeeper.LevelGroup.GetNextSceneIndex();
@@ -40,5 +41,11 @@ public class LevelSaveSystem : SaveSystem
         string levelGroupName = _levelGroupKeeper.LevelGroup.name;
         _currentLevelGroupProgress = new LevelGroupProgress(nextSceneIndex, questions, enableEffectIndexes);
         SaveProgress(_currentLevelGroupProgress, levelGroupName);
+    }
+
+    [ContextMenu("Reset Progress")]
+    private void ResetProgress()
+    {
+        ResetProgress(_levelGroupKeeper.LevelGroup.name);
     }
 }

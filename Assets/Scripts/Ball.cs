@@ -11,6 +11,7 @@ public class Ball : MonoBehaviour
     [SerializeField] private GameObject _model;
     [SerializeField] private ShapeEffectHierarchy _shapeHierarchy;
     [SerializeField] private float _breakingForce;
+    [SerializeField] private QuestionScore _questionScore;
 
     private Rigidbody _rigidbody;
     private FireCarrier _fireCarrier;
@@ -35,6 +36,12 @@ public class Ball : MonoBehaviour
             if (_fireCarrier == null || _fireCarrier.IsBurning == false)
                 Break();
         }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.TryGetComponent(out Question question))
+            _questionScore.AddQuestion();
     }
 
     private void OnTriggerExit(Collider other)
