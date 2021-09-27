@@ -27,7 +27,7 @@ public class QuestionScore : MonoBehaviour
         else if (_levelSaveSystem.IsProgressDownloaded)
             OnProgressDownloaded();
         else
-            _levelSaveSystem.ProgressDownloaded += OnProgressDownloaded;
+            _levelSaveSystem.ProgressSet += OnProgressDownloaded;
 
         TryInvokeQuestionsChanged();
     }
@@ -36,7 +36,7 @@ public class QuestionScore : MonoBehaviour
     {
         _ball.Died -= OnBallDied;
         _finish.LevelFinished -= OnLevelFinished;
-        _levelSaveSystem.ProgressDownloaded -= OnProgressDownloaded;
+        _levelSaveSystem.ProgressSet -= OnProgressDownloaded;
     }
 
     private void TryInvokeQuestionsChanged()

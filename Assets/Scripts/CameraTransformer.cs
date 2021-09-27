@@ -13,8 +13,12 @@ public abstract class CameraTransformer<Adder> : MonoBehaviour where Adder : ICa
     private Dictionary<Adder, bool> _enabledAddersUpdated;
     private event UnityAction _startParametersSet;
     private bool _isStartParametersSet;
+    private bool _isAdderBoolDictionaryInited;
 
     protected Camera MainCamera => _mainCamera;
+    protected bool IsAdderBoolDictionaryInited => _isAdderBoolDictionaryInited;
+
+    protected event UnityAction AdderBoolDictionaryInited;
 
     public event UnityAction ParametersReset;
     public event UnityAction AdderEnabled;
@@ -23,7 +27,12 @@ public abstract class CameraTransformer<Adder> : MonoBehaviour where Adder : ICa
     protected virtual void Awake()
     {
         if (_testModeSetter.IsTestMode == false)
-            _effectKeeper.SavedEffectsEnabled += OnSavedEffectsEnabled;
+        {
+            if (_effectKeeper.IsSavedEffectsEnabled == false)
+                _effectKeeper.SavedEffectsEnabled += OnSavedEffectsEnabled;
+            else
+                OnSavedEffectsEnabled();
+        }
         else
             OnSavedEffectsEnabled();
     }
@@ -42,6 +51,8 @@ public abstract class CameraTransformer<Adder> : MonoBehaviour where Adder : ICa
     private void OnSavedEffectsEnabled()
     {
         _enabledAddersUpdated = InitAdderBoolDictionary();
+        _isAdderBoolDictionaryInited = true;
+        AdderBoolDictionaryInited?.Invoke();
     }
 
     private Dictionary<Adder, bool> InitAdderBoolDictionary()
@@ -111,6 +122,7 @@ public abstract class CameraTransformer<Adder> : MonoBehaviour where Adder : ICa
 
     protected void InvokeStartParametersSet()
     {
+        _isStartParametersSet = true;
         _startParametersSet?.Invoke();
     }
 
@@ -121,7 +133,7 @@ public abstract class CameraTransformer<Adder> : MonoBehaviour where Adder : ICa
 
     protected bool IsAddersContains(Adder key)
     {
-        return _enabledAddersUpdated.ContainsKey(key);
+        return _enabledAddersUpdated != null && _enabledAddersUpdated.ContainsKey(key);
     }
 
     protected void UpdateAdder(Adder adder)

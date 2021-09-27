@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -11,6 +12,7 @@ public class EffectKeeper : MonoBehaviour
     [SerializeField] private EffectView _effectViewPrefab;
     [SerializeField] private LevelSaveSystem _levelSaveSystem;
     [SerializeField] private TestModeSetter _testModeSetter;
+    [SerializeField] private LevelGroupKeeper _levelGroupKeeper;
 
     private bool _isSavedEffectsEnabled = false;
 
@@ -20,9 +22,9 @@ public class EffectKeeper : MonoBehaviour
     private void Start()
     {
         if (_levelSaveSystem.IsProgressDownloaded)
-            EnableSavedEffects();
+            OnProgressDownloaded();
         else
-            _levelSaveSystem.ProgressDownloaded += OnProgressDownloaded;
+            _levelSaveSystem.ProgressSet += OnProgressDownloaded;
 
         foreach (Effect effect in _effects)
         {
@@ -34,7 +36,7 @@ public class EffectKeeper : MonoBehaviour
 
     private void OnDestroy()
     {
-        _levelSaveSystem.ProgressDownloaded -= OnProgressDownloaded;
+        _levelSaveSystem.ProgressSet -= OnProgressDownloaded;
         foreach (Effect effect in _effects)
         {
             Destroy(effect);
@@ -48,7 +50,7 @@ public class EffectKeeper : MonoBehaviour
 
     private void EnableSavedEffects()
     {
-        int[] savedEffectIndexes = _levelSaveSystem.CurrentLevelGroupProgress.EffectIndexes;
+        int[] savedEffectIndexes = _levelSaveSystem.CurrentLevelGroupProgress.EnabledEffectIndexes;
         foreach (int effectIndex in savedEffectIndexes)
         {
             _effects[effectIndex].enabled = true;
@@ -62,6 +64,27 @@ public class EffectKeeper : MonoBehaviour
     {
         if (_questionScore.TryPayQuestions(price))
             view.OnEffectDisablingBought();
+    }
+
+    public List<Effect> GetProposedEffects()
+    {
+        List<Effect> proposedEffects = new List<Effect>();
+        int[] currentLevelEffectIndexes = _levelGroupKeeper.LevelGroup.GetCurrentLevelEffectIndexes();
+        int[] savedProposedEffectIndexes = _levelSaveSystem.CurrentLevelGroupProgress.ProposedEffectIndexes;
+        int[] proposedEffectIndexes = currentLevelEffectIndexes.Union(savedProposedEffectIndexes).ToArray();
+
+        foreach (int index in proposedEffectIndexes)
+        {
+            if (_effects.Count > index && index >= 0)
+                proposedEffects.Add(_effects[index]);
+        }
+        
+        return proposedEffects;
+    }
+
+    public int GetIndex(Effect effect)
+    {
+        return _effects.IndexOf(effect);
     }
 
     public List<Effect> GetRandomDisabledEffects(int amount)

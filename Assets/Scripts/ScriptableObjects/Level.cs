@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,7 +7,9 @@ using UnityEngine;
 public class Level : ScriptableObject
 {
     [SerializeField] private int _sceneIndex;
-    // TODO: Добавить эффекты
+    [SerializeField] private int[] _effectIndexes;
 
     public int SceneIndex => _sceneIndex;
+    public int[] EffectIndexes => (int[])_effectIndexes.Clone();
+    public int[] DeleteIt => _effectIndexes;// TODO: delete
 }

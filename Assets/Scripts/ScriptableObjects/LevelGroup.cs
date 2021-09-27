@@ -21,6 +21,11 @@ public class LevelGroup : ScriptableObject
         return _levels.FindIndex(level => level.SceneIndex == currentSceneIndex);
     }
 
+    public int[] GetCurrentLevelEffectIndexes()
+    {
+         return _levels[GetCurrentLevelIndex()].EffectIndexes;
+    }
+
     public int GetNextSceneIndex()
     {
         int currentLevelIndex = GetCurrentLevelIndex();

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class ChooseEffectMenu : MonoBehaviour
 {
@@ -11,8 +12,12 @@ public class ChooseEffectMenu : MonoBehaviour
     [SerializeField] private StartMenu _startMenu;
     [SerializeField] private TestModeSetter _testModeSetter;
     [SerializeField] private LevelGroupKeeper _levelGroupKeeper;
+    [SerializeField] private LevelSaveSystem _levelSaveSystem;
 
     private List<ChooseEffectButton> _chooseEffectButtons;
+    private List<Effect> _proposedEffects;
+
+    public event UnityAction<List<Effect>> EffectChosen;
 
     private void Awake()
     {
@@ -26,11 +31,23 @@ public class ChooseEffectMenu : MonoBehaviour
     {
         if (_testModeSetter.IsTestMode == false)
         {
-            if (_effectKeeper.IsSavedEffectsEnabled || _levelGroupKeeper.LevelGroup.GetCurrentLevelIndex() == 0)
-                Activate();
+            if (_levelSaveSystem.IsProgressDownloaded == false)
+                _levelSaveSystem.ProgressSet += OnProgressDownloaded;
             else
-                _effectKeeper.SavedEffectsEnabled += Activate;
+                OnProgressDownloaded();
         }
+    }
+
+    private void OnProgressDownloaded()
+    {
+        _levelSaveSystem.ProgressSet -= OnProgressDownloaded;
+        if (_levelSaveSystem.CurrentLevelGroupProgress.IsEffectChosen == false)
+        {
+            _proposedEffects = _effectKeeper.GetProposedEffects();
+            CreateChooseEffectButtons();
+        }
+        else
+            gameObject.SetActive(false);
     }
 
     private void OnDisable()
@@ -48,22 +65,14 @@ public class ChooseEffectMenu : MonoBehaviour
         }
     }
 
-    private void Activate()
-    {
-        _effectKeeper.SavedEffectsEnabled -= Activate;
-        gameObject.SetActive(true);
-        CreateChooseEffectButtons();
-    }
-
     private void CreateChooseEffectButtons()
     {
-        List<Effect> randomEffects = _effectKeeper.GetRandomDisabledEffects(_chooseEffectButtonPlaces.Count);
-        if (randomEffects.Count > 0)
+        if (_proposedEffects.Count > 0)
         {
-            for (int i = 0; i < randomEffects.Count; i++)
+            for (int i = 0; i < _proposedEffects.Count; i++)
             {
                 ChooseEffectButton chooseEffectButton = Instantiate(_chooseEffectButtonTemplate, _chooseEffectButtonPlaces[i]);
-                chooseEffectButton.Init(randomEffects[i]);
+                chooseEffectButton.Init(_proposedEffects[i]);
                 chooseEffectButton.Clicked += OnChooseEffectButtonClicked;
                 _chooseEffectButtons.Add(chooseEffectButton);
             }
@@ -72,8 +81,10 @@ public class ChooseEffectMenu : MonoBehaviour
             gameObject.SetActive(false);
     }
 
-    private void OnChooseEffectButtonClicked()
+    private void OnChooseEffectButtonClicked(Effect effect)
     {
+        _proposedEffects.Remove(effect);
+        EffectChosen(_proposedEffects);
         gameObject.SetActive(false);
     }
 }
