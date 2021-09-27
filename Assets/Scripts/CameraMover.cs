@@ -12,18 +12,24 @@ public class CameraMover : CameraTransformer<ICameraMovingAdder>
 
     public Vector3 StartOffset => _startOffset;
 
-    protected override void Awake()
-    {
-        base.Awake();
-        if (_defaultFollower is ICameraMovingAdder adder)
-            AddAdder(adder);
-    }
-
     private void Start()
     {
         _startOffset = MainCamera.transform.position - _ballTransformObserver.BallPosition;
+        if (IsAdderBoolDictionaryInited == false)
+            AdderBoolDictionaryInited += OnAdderBoolDictionaryInited;
+        else
+            OnAdderBoolDictionaryInited();
+    }
+
+    private void OnAdderBoolDictionaryInited()
+    {
+        AdderBoolDictionaryInited -= OnAdderBoolDictionaryInited;
         ResetFrameParameters();
         InvokeStartParametersSet();
+        if (_defaultFollower is ICameraMovingAdder adder)
+        {
+            AddAdder(adder);
+        }
     }
 
     private void ResetCameraPosition()

@@ -54,7 +54,7 @@ public class Ball : MonoBehaviour
     {
         Destroy(_model);
         _model = newModel;
-        ShapeChanged.Invoke();
+        ShapeChanged?.Invoke();
     }
 
     private void Break()

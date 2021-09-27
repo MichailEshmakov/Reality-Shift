@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,6 +11,15 @@ public class CameraRotator : CameraTransformer<ICameraRotatingAdder>
     private void Start()
     {
         _startRotation = MainCamera.transform.rotation;
+        if (IsAdderBoolDictionaryInited == false)
+            AdderBoolDictionaryInited += OnAdderBoolDictionaryInited;
+        else
+            OnAdderBoolDictionaryInited();
+
+    }
+
+    private void OnAdderBoolDictionaryInited()
+    {
         ResetFrameParameters();
         InvokeStartParametersSet();
     }

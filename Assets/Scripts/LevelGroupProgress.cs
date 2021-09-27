@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,24 +8,29 @@ public struct LevelGroupProgress
 {
     [SerializeField] private int _sceneIndex;
     [SerializeField] private int _questions;
-    [SerializeField] private int[] _effectIndexes;
+    [SerializeField] private int[] _enabledEffectIndexes;
+    [SerializeField] private int[] _proposedEffectIndexes;
+    [SerializeField] private bool _isEffectChosen;
 
     public int Questions => _questions;
     public int SceneIndex => _sceneIndex;
-    public int[] EffectIndexes
-    {
-        get
-        {
-            int[] effectIndexes = new int[_effectIndexes.Length];
-            Array.Copy(_effectIndexes, effectIndexes, _effectIndexes.Length);
-            return effectIndexes;
-        }
-    }
+    public int[] EnabledEffectIndexes => CopyArray(_enabledEffectIndexes);
+    public int[] ProposedEffectIndexes => CopyArray(_proposedEffectIndexes);
+    public bool IsEffectChosen => _isEffectChosen;
 
-    public LevelGroupProgress(int sceneIndex, int questions, int[] effectIndexes)
+    public LevelGroupProgress(int sceneIndex, int questions, int[] enabledEffectIndexes, int[] proposedEffectIndexes, bool isEffectChosen = false)
     {
         _sceneIndex = sceneIndex;
         _questions = questions;
-        _effectIndexes = effectIndexes;
+        _enabledEffectIndexes = enabledEffectIndexes.Distinct().ToArray();
+        _proposedEffectIndexes = proposedEffectIndexes.Distinct().ToArray();
+        _isEffectChosen = isEffectChosen;
+    }
+
+    private int[] CopyArray(int[] previousArray)
+    {
+        int[] newArray = new int[previousArray.Length];
+        Array.Copy(previousArray, newArray, previousArray.Length);
+        return newArray;
     }
 }

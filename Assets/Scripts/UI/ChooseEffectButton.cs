@@ -15,7 +15,7 @@ public class ChooseEffectButton : MonoBehaviour
     private Button _button;
     private Effect _effect;
 
-    public event UnityAction Clicked;
+    public event UnityAction<Effect> Clicked;
     
     private void Awake()
     {
@@ -26,7 +26,7 @@ public class ChooseEffectButton : MonoBehaviour
     private void OnClick()
     {
         _effect.enabled = true;
-        Clicked?.Invoke();
+        Clicked?.Invoke(_effect);
     }
 
     public void Init(Effect effect)
