@@ -144,6 +144,6 @@ public abstract class CameraTransformer<Adder> : MonoBehaviour where Adder : ICa
 
     public bool HasAdders()
     {
-        return _enabledAddersUpdated.Count > 0;
+        return _enabledAddersUpdated != null && _enabledAddersUpdated.Count > 0;
     }
 }
