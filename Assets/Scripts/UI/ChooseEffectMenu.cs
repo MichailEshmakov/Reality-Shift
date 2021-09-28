@@ -31,7 +31,7 @@ public class ChooseEffectMenu : MonoBehaviour
     {
         if (_testModeSetter.IsTestMode == false)
         {
-            if (_levelSaveSystem.IsProgressDownloaded == false)
+            if (_levelSaveSystem.IsProgressSet == false)
                 _levelSaveSystem.ProgressSet += OnProgressDownloaded;
             else
                 OnProgressDownloaded();

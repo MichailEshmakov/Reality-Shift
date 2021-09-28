@@ -21,7 +21,7 @@ public class EffectKeeper : MonoBehaviour
 
     private void Start()
     {
-        if (_levelSaveSystem.IsProgressDownloaded)
+        if (_levelSaveSystem.IsProgressSet)
             OnProgressDownloaded();
         else
             _levelSaveSystem.ProgressSet += OnProgressDownloaded;

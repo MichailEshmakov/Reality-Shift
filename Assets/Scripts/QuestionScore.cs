@@ -20,7 +20,7 @@ public class QuestionScore : MonoBehaviour
     {
         SetFinish();
 
-        if (_levelSaveSystem.IsProgressDownloaded)
+        if (_levelSaveSystem.IsProgressSet)
             OnProgressSet();
         else
             _levelSaveSystem.ProgressSet += OnProgressSet;

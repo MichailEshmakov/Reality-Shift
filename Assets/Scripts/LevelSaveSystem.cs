@@ -12,11 +12,11 @@ public class LevelSaveSystem : SaveSystem
     [SerializeField] private EffectKeeper _effectKeeper;
     [SerializeField] private LevelGroupKeeper _levelGroupKeeper;
     [SerializeField] private ChooseEffectMenu _chooseEffectMenu;
-
+ 
     private LevelGroupProgress _currentLevelGroupProgress;
     private bool _isProgressSet = false;
 
-    public bool IsProgressDownloaded => _isProgressSet;
+    public bool IsProgressSet => _isProgressSet;
     public LevelGroupProgress CurrentLevelGroupProgress => _currentLevelGroupProgress;
 
     public event UnityAction ProgressSet;

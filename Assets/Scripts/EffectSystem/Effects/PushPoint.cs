@@ -16,7 +16,8 @@ public class PushPoint : MonoBehaviour
             && other.TryGetComponent(out BallPart ballPart) == false
             && other.TryGetComponent(out LevelBorder levelBorder) == false)
         {
-            _ball.AddForce((_ball.transform.position - transform.position).normalized * _impulse, ForceMode.Impulse);
+            if (_ball != null)
+                _ball.AddForce((_ball.transform.position - transform.position).normalized * _impulse, ForceMode.Impulse);
         }
     }
 

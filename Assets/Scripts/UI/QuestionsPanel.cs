@@ -28,8 +28,8 @@ public class QuestionsPanel : MonoBehaviour
             _button.interactable = false;
 
         _questionScore.QuestionsChanged += OnQuestionsChanged;
-        SubscribedOnQuestionsChanged?.Invoke();
         _isSubscribedOnQuestionsChanged = true;
+        SubscribedOnQuestionsChanged?.Invoke();
     }
 
     private void OnDestroy()
