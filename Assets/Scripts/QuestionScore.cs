@@ -5,7 +5,6 @@ using UnityEngine.Events;
 
 public class QuestionScore : MonoBehaviour
 {
-    [SerializeField] private Ball _ball;
     [SerializeField] private QuestionsPanel _questionsPanel;
     [SerializeField] private LevelGroupKeeper _levelGroupKeeper;
     [SerializeField] private LevelSaveSystem _levelSaveSystem;
@@ -20,23 +19,17 @@ public class QuestionScore : MonoBehaviour
     private void Start()
     {
         SetFinish();
-        _ball.Died += OnBallDied;
-        
-        if (_levelGroupKeeper.LevelGroup.GetCurrentLevelIndex() == 0)
-            _questions = _levelGroupKeeper.LevelGroup.StartQuestions;
-        else if (_levelSaveSystem.IsProgressDownloaded)
-            OnProgressDownloaded();
-        else
-            _levelSaveSystem.ProgressSet += OnProgressDownloaded;
 
-        TryInvokeQuestionsChanged();
+        if (_levelSaveSystem.IsProgressDownloaded)
+            OnProgressSet();
+        else
+            _levelSaveSystem.ProgressSet += OnProgressSet;
     }
 
     private void OnDestroy()
     {
-        _ball.Died -= OnBallDied;
         _finish.LevelFinished -= OnLevelFinished;
-        _levelSaveSystem.ProgressSet -= OnProgressDownloaded;
+        _levelSaveSystem.ProgressSet -= OnProgressSet;
     }
 
     private void TryInvokeQuestionsChanged()
@@ -48,12 +41,6 @@ public class QuestionScore : MonoBehaviour
         }
         else
             _questionsPanel.SubscribedOnQuestionsChanged += TryInvokeQuestionsChanged;
-    }
-
-    private void OnBallDied()
-    {
-        _questionsOnThisLevel = 0;
-        QuestionsChanged?.Invoke(_questions);
     }
 
     private void OnLevelFinished()
@@ -72,9 +59,10 @@ public class QuestionScore : MonoBehaviour
             _finish.LevelFinished += OnLevelFinished;
     }
 
-    private void OnProgressDownloaded()
+    private void OnProgressSet()
     {
         _questions = _levelSaveSystem.CurrentLevelGroupProgress.Questions;
+        TryInvokeQuestionsChanged();
     }
 
     public void AddQuestion()
@@ -88,7 +76,7 @@ public class QuestionScore : MonoBehaviour
         if (_questions >= price)
         {
             _questions -= price;
-            QuestionsChanged?.Invoke(_questions + _questionsOnThisLevel);
+            TryInvokeQuestionsChanged();
             return true;
         }
 
