@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class Finish : MonoBehaviour
+public class Finisher : MonoBehaviour
 {
     [SerializeField] private float _endDelay;
 
@@ -14,7 +14,7 @@ public class Finish : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.GetComponentInParent<Ball>() != null)
+        if (other.gameObject.TryGetComponent(out FinishPlace finishPlace))
         {
             _isBallInside = true;
             StartCoroutine(WaitFinish());
@@ -23,7 +23,7 @@ public class Finish : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.GetComponentInParent<Ball>() != null)
+        if (other.gameObject.TryGetComponent(out FinishPlace finishPlace))
         {
             _isBallInside = false;
         }
