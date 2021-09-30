@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+[RequireComponent (typeof(FireCarrier))]
 [RequireComponent(typeof(Rigidbody))]
 public class Ball : MonoBehaviour
 {
