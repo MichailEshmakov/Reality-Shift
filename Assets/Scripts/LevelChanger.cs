@@ -8,20 +8,23 @@ public class LevelChanger : MonoBehaviour
 {
     [SerializeField] private int _defaultSceneIndex;
     [SerializeField] private LevelSaveSystem _levelSaveSystem;
+    [SerializeField] private Finisher _finisher;
 
-    private Finish _finish;
     private bool _isLevelFinished = false;
 
     private void Awake()
     {
-        SetFinish();
+        _finisher.LevelFinished += OnLevelFinished;
         _levelSaveSystem.ProgressSaved += OnProgressSaved;
     }
 
     private void OnDestroy()
     {
-        _finish.LevelFinished -= OnLevelFinished;
-        _levelSaveSystem.ProgressSaved -= OnProgressSaved;
+        if (_finisher != null)
+            _finisher.LevelFinished -= OnLevelFinished;
+
+        if (_levelSaveSystem != null)
+            _levelSaveSystem.ProgressSaved -= OnProgressSaved;
     }
 
     private void OnProgressSaved()
@@ -39,14 +42,5 @@ public class LevelChanger : MonoBehaviour
     private void OnLevelFinished()
     {
         _isLevelFinished = true;
-    }
-
-    private void SetFinish()
-    {
-        _finish = FindObjectOfType<Finish>();
-        if (_finish == null)
-            Debug.LogError($"Finish is not found by {gameObject.name}");
-        else
-            _finish.LevelFinished += OnLevelFinished;
     }
 }

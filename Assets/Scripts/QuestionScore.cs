@@ -8,17 +8,17 @@ public class QuestionScore : MonoBehaviour
     [SerializeField] private QuestionsPanel _questionsPanel;
     [SerializeField] private LevelGroupKeeper _levelGroupKeeper;
     [SerializeField] private LevelSaveSystem _levelSaveSystem;
+    [SerializeField] private Finisher _finisher;
 
     private int _questions;
     private int _questionsOnThisLevel;
-    private Finish _finish;
 
     public event UnityAction<int> QuestionsChanged;
     public event UnityAction<int> LevelQuestionsRecorded;
 
     private void Start()
     {
-        SetFinish();
+        _finisher.LevelFinished += OnLevelFinished;
 
         if (_levelSaveSystem.IsProgressSet)
             OnProgressSet();
@@ -28,8 +28,11 @@ public class QuestionScore : MonoBehaviour
 
     private void OnDestroy()
     {
-        _finish.LevelFinished -= OnLevelFinished;
-        _levelSaveSystem.ProgressSet -= OnProgressSet;
+        if (_finisher != null)
+            _finisher.LevelFinished -= OnLevelFinished;
+        
+        if (_levelSaveSystem != null)
+            _levelSaveSystem.ProgressSet -= OnProgressSet;
     }
 
     private void TryInvokeQuestionsChanged()
@@ -48,15 +51,6 @@ public class QuestionScore : MonoBehaviour
         _questions += _questionsOnThisLevel;
         _questionsOnThisLevel = 0;
         LevelQuestionsRecorded?.Invoke(_questions);
-    }
-
-    private void SetFinish()
-    {
-        _finish = FindObjectOfType<Finish>();
-        if (_finish == null)
-            Debug.LogError($"Finish is not found by {gameObject.name}");
-        else
-            _finish.LevelFinished += OnLevelFinished;
     }
 
     private void OnProgressSet()
